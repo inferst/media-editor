@@ -1,0 +1,18 @@
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 12px;
+
+  .tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    fill: #AAAAAA;
+  }
+
+  .tab--active {
+    fill: #4E8EE5;
+  }
+}

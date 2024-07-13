@@ -1,0 +1,38 @@
+.sidebar {
+  flex-shrink: 0;
+  width: 320px;
+  background: #212121;
+
+  .sidebar__title {
+    display: flex;
+    padding: 0 8px;
+
+    .title {
+      font-size: 20px;
+      flex-grow: 1;
+      padding: 16px;
+    }
+
+    .undo-redo {
+      display: flex;
+      padding: 16px;
+      fill: #AAAAAA;
+
+      .undo {
+        display: flex;
+        place-items: center;
+        padding-right: 24px;
+      }
+
+      .redo {
+        display: flex;
+        place-items: center;
+      }
+    }
+  }
+
+  .shadow {
+    height: 1px;
+    box-shadow: 0px 2px 4px 0px #0000001A;
+  }
+}
