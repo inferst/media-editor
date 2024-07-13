@@ -5,8 +5,8 @@ import { Sidebar } from "./components/Sidebar/Sidebar";
 function App() {
   return (
     <>
-      <Editor></Editor>
-      <Sidebar></Sidebar>
+      <Editor />
+      <Sidebar />
     </>
   );
 }

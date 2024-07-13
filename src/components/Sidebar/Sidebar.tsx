@@ -20,7 +20,7 @@ export function Sidebar() {
       <div class="sidebar__tabs">
         <Tabs />
       </div>
-      <div class='shadow'></div>
+      <div class='shadow' />
     </div>
   );
 }
