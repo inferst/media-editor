@@ -1,9 +1,9 @@
+import Brush from "@assets/icons/brush.svg";
+import Crop from "@assets/icons/crop.svg";
+import Enhance from "@assets/icons/enhance.svg";
+import Smile from "@assets/icons/smile.svg";
+import Text from '@assets/icons/text.svg';
 import { createSignal, For, JSX } from "solid-js";
-import Brush from "../../assets/icons/brush.svg";
-import Crop from "../../assets/icons/crop.svg";
-import Enhance from "../../assets/icons/enhance.svg";
-import Smile from "../../assets/icons/smile.svg";
-import Text from "../../assets/icons/text.svg";
 import Tab, { TabItemType } from "./Tab";
 import "./Tabs.css";
 

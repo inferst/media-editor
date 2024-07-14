@@ -1,7 +1,8 @@
 import { defineConfig } from "vite";
+import eslint from "vite-plugin-eslint";
 import solid from "vite-plugin-solid";
 import solidSvg from "vite-plugin-solid-svg";
-import eslint from 'vite-plugin-eslint';
+import tsConfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   plugins: [
@@ -10,5 +11,6 @@ export default defineConfig({
       defaultAsComponent: true,
     }),
     eslint(),
+    tsConfigPaths(),
   ],
 });
