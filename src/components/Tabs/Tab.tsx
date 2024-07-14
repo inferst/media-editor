@@ -1,5 +1,6 @@
 import { JSX, ParentComponent } from "solid-js";
 import clsx from "clsx";
+import styles from "./Tabs.module.css";
 
 export type TabItemType = "enhance" | "crop" | "text" | "brush" | "smile";
 
@@ -17,7 +18,7 @@ const Tab: ParentComponent<TabProps> = (props): JSX.Element => {
   return (
     <div
       onClick={handleClick}
-      class={clsx("tab", { "tab--active": props.isActive })}
+      class={clsx(styles.tab, { [styles["tab--active"]]: props.isActive })}
     >
       {props.children}
     </div>

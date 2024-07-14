@@ -1,15 +1,18 @@
-import Brush from "@assets/icons/brush.svg";
-import Crop from "@assets/icons/crop.svg";
-import Enhance from "@assets/icons/enhance.svg";
-import Smile from "@assets/icons/smile.svg";
-import Text from '@assets/icons/text.svg';
+import BrushSVG from "@assets/icons/brush.svg";
+import CropSVG from "@assets/icons/crop.svg";
+import EnhanceSVG from "@assets/icons/enhance.svg";
+import SmileSVG from "@assets/icons/smile.svg";
+import TextSVG from "@assets/icons/text.svg";
+import clsx from "clsx";
 import { createSignal, For, JSX } from "solid-js";
+import Enhance from "../content/Enhance/Enhance";
 import Tab, { TabItemType } from "./Tab";
-import "./Tabs.css";
+import styles from "./Tabs.module.css";
 
 export type TabItem = {
   type: TabItemType;
-  element: JSX.Element;
+  tab: JSX.Element;
+  content: JSX.Element;
 };
 
 export type TabsProps = {
@@ -17,45 +20,81 @@ export type TabsProps = {
 };
 
 export function Tabs() {
-  const [currentTab, setCurrentTab] = createSignal<TabItemType>('enhance');
+  const [currentTab, setCurrentTab] = createSignal<TabItemType>("enhance");
 
-  const icons: TabItem[] = [
+  const tabs: TabItem[] = [
     {
       type: "enhance",
-      element: <Enhance />,
+      tab: <EnhanceSVG />,
+      content: <Enhance />,
     },
     {
       type: "crop",
-      element: <Crop />,
+      tab: <CropSVG />,
+      content: "",
     },
     {
       type: "text",
-      element: <Text />,
+      tab: <TextSVG />,
+      content: "",
     },
     {
       type: "brush",
-      element: <Brush />,
+      tab: <BrushSVG />,
+      content: "",
     },
     {
       type: "smile",
-      element: <Smile />,
+      tab: <SmileSVG />,
+      content: "",
     },
   ];
 
+  // const index = createMemo(() => {
+  //   const tab = tabs.find((tab) => tab.type == currentTab());
+  //
+  //   if (tab) {
+  //     return tabs.indexOf(tab);
+  //   }
+  //
+  //   return 0;
+  // });
+
   const handleClick = (type: TabItemType) => {
     setCurrentTab(type);
-    console.log(type);
   };
 
   return (
-    <div class="tabs">
-      <For each={icons}>
-        {(icon) => (
-          <Tab type={icon.type} onClick={handleClick} isActive={icon.type == currentTab()}>
-            {icon.element}
-          </Tab>
-        )}
-      </For>
-    </div>
+    <>
+      <div class={styles.tabs}>
+        <For each={tabs}>
+          {(item) => (
+            <Tab
+              type={item.type}
+              onClick={handleClick}
+              isActive={item.type == currentTab()}
+            >
+              {item.tab}
+            </Tab>
+          )}
+        </For>
+        <div class={styles.selected}>
+          <div class={clsx(styles.line, styles.active)} />
+        </div>
+      </div>
+      <div class={styles.scrollable}>
+        <For each={tabs}>
+          {(tab) => (
+            <div
+              class={clsx(styles.content, {
+                [styles["content--active"]]: tab.type == currentTab(),
+              })}
+            >
+              {tab.content}
+            </div>
+          )}
+        </For>
+      </div>
+    </>
   );
 }

@@ -1,0 +1,75 @@
+.slider {
+    position: relative;
+    height: 4px;
+}
+
+.slider-input {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+    display: block;
+    position: absolute;
+    width: 100%;
+    margin: 0;
+}
+
+/* Removes default focus */
+.slider-input:focus {
+    outline: none;
+}
+
+@-moz-document url-prefix() {
+    .slider-input {
+        margin-top: -7px;
+    }
+}
+
+/***** Chrome, Safari, Opera and Edge Chromium styles *****/
+/* slider track */
+.slider-input::-webkit-slider-runnable-track {
+    background: #AAAAAA1A;
+    border-radius: 2px;
+    height: 4px;
+}
+
+/* slider thumb */
+.slider-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    /* Override default look */
+    appearance: none;
+    /* Centers thumb on the track */
+    margin-top: -8px;
+
+    /*custom styles*/
+    background-color: #4E8EE5;
+    height: 20px;
+    width: 20px;
+    border-radius: 10px;
+}
+
+/******** Firefox styles ********/
+/* slider track */
+.slider-input::-moz-range-track {
+    background: #AAAAAA1A;
+    border-radius: 2px;
+    height: 4px;
+}
+
+/* slider thumb */
+.slider-input::-moz-range-thumb {
+    /* custom styles */
+    background-color: #4E8EE5;
+    height: 20px;
+    width: 20px;
+    border: none;
+    border-radius: 10px;
+}
+
+.slider-track--active {
+    position: absolute;
+    height: 4px;
+    width: 100%;
+    background-color: #4E8EE5;
+    border-radius: 2px;
+}
