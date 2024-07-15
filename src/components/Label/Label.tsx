@@ -1,17 +1,20 @@
 import { JSX, ParentComponent, Show } from "solid-js";
 import styles from "./Label.module.css";
+import clsx from "clsx";
 
 type LabelProps = {
-  color?: string;
   tail?: JSX.Element;
+  class?: JSX.ElementClass;
 };
 
 const Label: ParentComponent<LabelProps> = (props) => {
   return (
-    <div class={styles.label} style={{ color: props.color }}>
+    <div class={clsx(styles.label, props.class)}>
       <div class={styles.heading}>{props.children}</div>
       <Show when={props.tail}>
-        <div class={styles.tail}>{props.tail}</div>
+        <div class={styles.tail}>
+          {props.tail}
+        </div>
       </Show>
     </div>
   );

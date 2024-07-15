@@ -1,19 +1,20 @@
 import { Component, createMemo, mergeProps } from "solid-js";
 import styles from "./Slider.module.css";
+import clsx from "clsx";
+
+export type SliderVariant = "default" | "active";
 
 type SliderProps = {
   value?: number;
   default?: number;
   min?: number;
   max?: number;
+  variant?: SliderVariant;
   onChange: (value: number) => void;
 };
 
 const Slider: Component<SliderProps> = (props) => {
-  const merged = mergeProps(
-    { value: 0, default: 0, min: 0, max: 100 },
-    props,
-  );
+  const merged = mergeProps({ value: 0, default: 0, min: 0, max: 100 }, props);
 
   let inputRef: HTMLInputElement | undefined;
 
@@ -50,9 +51,13 @@ const Slider: Component<SliderProps> = (props) => {
   );
 
   return (
-    <div class={styles.slider}>
+    <div
+      class={clsx(styles.slider, {
+        [styles["slider--active"]]: props.variant == "active",
+      })}
+    >
       <div
-        class={styles["slider-track--active"]}
+        class={styles["slider-track"]}
         style={{
           left: `${left()}%`,
           width: `${width()}%`,

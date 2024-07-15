@@ -1,0 +1,12 @@
+.row {
+  margin: 0 8px;
+}
+
+.column {
+  display: flex;
+  flex-shrink: 0;
+
+  &>* {
+    flex-grow: 1;
+  }
+}

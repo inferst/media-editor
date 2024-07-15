@@ -24,19 +24,19 @@
     fill: #4E8EE5;
 
     &:nth-child(2)~.selected {
-      transform: translateX(62px);
+      transform: translateX(82px);
     }
 
     &:nth-child(3)~.selected {
-      transform: translateX(124px);
+      transform: translateX(164px);
     }
 
     &:nth-child(4)~.selected {
-      transform: translateX(186px);
+      transform: translateX(246px);
     }
 
     &:nth-child(5)~.selected {
-      transform: translateX(248px);
+      transform: translateX(328px);
     }
   }
 
@@ -59,7 +59,7 @@
   display: none;
 
   &.content--active {
-    display: block !important;
+    display: block;
   }
 }
 

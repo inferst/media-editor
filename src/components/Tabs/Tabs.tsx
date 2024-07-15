@@ -8,6 +8,8 @@ import { createSignal, For, JSX } from "solid-js";
 import Enhance from "../content/Enhance/Enhance";
 import Tab, { TabItemType } from "./Tab";
 import styles from "./Tabs.module.css";
+import Crop from "../content/Crop/Crop";
+import Text from "../content/Text/Text";
 
 export type TabItem = {
   type: TabItemType;
@@ -31,12 +33,12 @@ export function Tabs() {
     {
       type: "crop",
       tab: <CropSVG />,
-      content: "",
+      content: <Crop />,
     },
     {
       type: "text",
       tab: <TextSVG />,
-      content: "",
+      content: <Text />,
     },
     {
       type: "brush",

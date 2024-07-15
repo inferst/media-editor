@@ -1,5 +1,5 @@
 .label {
-  padding: 32px 24px 22px 24px;
+  padding: 0 24px 22px 24px;
   display: flex;
 
   &:first-child {
@@ -9,4 +9,8 @@
   .heading {
     flex-grow: 1;
   }
+  
+  /* .tail { */
+  /*   color: #717579; */
+  /* } */
 }

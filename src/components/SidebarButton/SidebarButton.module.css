@@ -1,0 +1,33 @@
+.row {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  height: 48px;
+  border-radius: 10px;
+  cursor: pointer;
+  line-height: 1;
+
+  .icon {
+    padding: 0 16px;
+
+    svg {
+      display: block;
+    }
+  }
+
+  .title {
+    padding-left: 16px;
+  }
+
+  & * {
+    flex-grow: 0;
+  }
+
+  &.row--active {
+    background-color: #2B2B2B;
+  }
+
+  &:hover {
+    background-color: #2B2B2B;
+  }
+}

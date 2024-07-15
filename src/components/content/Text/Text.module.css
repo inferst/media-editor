@@ -1,0 +1,41 @@
+.text-row {
+  margin: 16px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.label {
+  color: #AAAAAA;
+}
+
+.roboto {
+  font-family: Roboto;
+}
+
+.typewriter {
+  font-family: Typewriter;
+}
+
+.avenir {
+  font-family: Avenir Next;
+}
+
+.courier {
+  font-family: Courier New;
+}
+
+.noteworthy {
+  font-family: Noteworthy;
+}
+
+.georgia {
+  font-family: Georgia;
+}
+
+.papyrus {
+  font-family: Papyrus;
+}
+
+.snell {
+  font-family: SnellRoundhand;
+}
