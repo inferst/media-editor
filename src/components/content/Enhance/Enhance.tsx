@@ -22,7 +22,6 @@ const Enhance = () => {
         min={0}
         max={100}
         default={0}
-        variant="active"
         heading="Enhance"
       />
       <Adjust
@@ -31,7 +30,6 @@ const Enhance = () => {
         min={-100}
         max={100}
         default={0}
-        variant="active"
         heading="Brightness"
       />
       <Adjust
@@ -40,7 +38,6 @@ const Enhance = () => {
         min={-100}
         max={100}
         default={0}
-        variant="active"
         heading="Contrast"
       />
       <Adjust
@@ -49,7 +46,6 @@ const Enhance = () => {
         min={-100}
         max={100}
         default={0}
-        variant="active"
         heading="Saturation"
       />
       <Adjust
@@ -58,7 +54,6 @@ const Enhance = () => {
         min={-100}
         max={100}
         default={0}
-        variant="active"
         heading="Warmth"
       />
       <Adjust
@@ -67,7 +62,6 @@ const Enhance = () => {
         min={0}
         max={100}
         default={0}
-        variant="active"
         heading="Fade"
       />
       <Adjust
@@ -76,7 +70,6 @@ const Enhance = () => {
         min={-100}
         max={100}
         default={0}
-        variant="active"
         heading="Highlights"
       />
       <Adjust
@@ -85,7 +78,6 @@ const Enhance = () => {
         min={-100}
         max={100}
         default={0}
-        variant="active"
         heading="Shadows"
       />
       <Adjust
@@ -94,7 +86,6 @@ const Enhance = () => {
         min={0}
         max={100}
         default={0}
-        variant="active"
         heading="Vignette"
       />
       <Adjust
@@ -103,7 +94,6 @@ const Enhance = () => {
         min={0}
         max={100}
         default={0}
-        variant="active"
         heading="Grain"
       />
       <Adjust
@@ -112,7 +102,6 @@ const Enhance = () => {
         min={0}
         max={100}
         default={0}
-        variant="active"
         heading="Sharpen"
       />
     </>

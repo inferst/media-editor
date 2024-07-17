@@ -4,17 +4,18 @@ import EnhanceSVG from "@assets/icons/enhance.svg";
 import SmileSVG from "@assets/icons/smile.svg";
 import TextSVG from "@assets/icons/text.svg";
 import clsx from "clsx";
-import { createSignal, For, JSX } from "solid-js";
+import { createMemo, createSignal, For, JSX, ValidComponent } from "solid-js";
+import { Dynamic } from "solid-js/web";
+import Crop from "../content/Crop/Crop";
 import Enhance from "../content/Enhance/Enhance";
+import Text from "../content/Text/Text";
 import Tab, { TabItemType } from "./Tab";
 import styles from "./Tabs.module.css";
-import Crop from "../content/Crop/Crop";
-import Text from "../content/Text/Text";
 
 export type TabItem = {
   type: TabItemType;
   tab: JSX.Element;
-  content: JSX.Element;
+  content: ValidComponent;
 };
 
 export type TabsProps = {
@@ -22,23 +23,23 @@ export type TabsProps = {
 };
 
 export function Tabs() {
-  const [currentTab, setCurrentTab] = createSignal<TabItemType>("enhance");
+  const [currentTabType, setCurrentTabType] = createSignal<TabItemType>("enhance");
 
   const tabs: TabItem[] = [
     {
       type: "enhance",
       tab: <EnhanceSVG />,
-      content: <Enhance />,
+      content: Enhance,
     },
     {
       type: "crop",
       tab: <CropSVG />,
-      content: <Crop />,
+      content: Crop,
     },
     {
       type: "text",
       tab: <TextSVG />,
-      content: <Text />,
+      content: Text,
     },
     {
       type: "brush",
@@ -52,6 +53,10 @@ export function Tabs() {
     },
   ];
 
+  const currentTab = createMemo(() => {
+    return tabs.find((tab) => tab.type == currentTabType());
+  });
+
   // const index = createMemo(() => {
   //   const tab = tabs.find((tab) => tab.type == currentTab());
   //
@@ -63,7 +68,7 @@ export function Tabs() {
   // });
 
   const handleClick = (type: TabItemType) => {
-    setCurrentTab(type);
+    setCurrentTabType(type);
   };
 
   return (
@@ -74,7 +79,7 @@ export function Tabs() {
             <Tab
               type={item.type}
               onClick={handleClick}
-              isActive={item.type == currentTab()}
+              isActive={item.type == currentTabType()}
             >
               {item.tab}
             </Tab>
@@ -85,17 +90,9 @@ export function Tabs() {
         </div>
       </div>
       <div class={styles.scrollable}>
-        <For each={tabs}>
-          {(tab) => (
-            <div
-              class={clsx(styles.content, {
-                [styles["content--active"]]: tab.type == currentTab(),
-              })}
-            >
-              {tab.content}
-            </div>
-          )}
-        </For>
+        <div class={clsx(styles.content, styles["content--active"])}>
+          <Dynamic component={currentTab()?.content} />
+        </div>
       </div>
     </>
   );

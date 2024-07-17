@@ -1,28 +1,4 @@
 .adjust {
-    &.default {
-        .value {
-            color: #AAAAAA;
-        }
-
-        .heading {
-            color: #AAAAAA;
-        }
-    }
-
-    &.active {
-        .value {
-            color: #4E8EE5;
-
-            &.empty {
-                color: #717579;
-            }
-        }
-
-        .heading {
-            color: #FFFFFF;
-        }
-    }
-
     .value {
         color: #AAAAAA;
     }

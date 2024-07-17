@@ -1,6 +1,6 @@
 import { Component, createMemo, JSX } from "solid-js";
 import Label from "../Label/Label";
-import Slider, { SliderVariant } from "../Slider/Slider";
+import Slider from "../CustomSlider/Slider";
 import styles from "./Adjust.module.css";
 import clsx from "clsx";
 
@@ -12,7 +12,6 @@ type AdjustProps = {
   value?: number;
   default?: number;
   color?: string;
-  variant?: SliderVariant;
 };
 
 const Adjust: Component<AdjustProps> = (props) => {
@@ -28,15 +27,8 @@ const Adjust: Component<AdjustProps> = (props) => {
     );
   });
 
-  const variantClass = () => {
-    return {
-      [styles.default]: props.variant == "default",
-      [styles.active]: props.variant == "active",
-    };
-  };
-
   return (
-    <div class={clsx(styles.adjust, variantClass())}>
+    <div class={clsx(styles.adjust)}>
       <Label tail={tail()}>
         <div class={styles.heading}>{props.heading}</div>
       </Label>
@@ -47,7 +39,6 @@ const Adjust: Component<AdjustProps> = (props) => {
           value={props.value}
           default={props.default}
           onChange={props.onChange}
-          variant={props.variant}
         />
       </div>
     </div>

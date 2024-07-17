@@ -1,4 +1,4 @@
-import { Component, For } from "solid-js";
+import { Component, createSignal, For, Show } from "solid-js";
 import styles from "./Colors.module.css";
 import clsx from "clsx";
 
@@ -12,6 +12,8 @@ type ColorsProps = {
 };
 
 const Colors: Component<ColorsProps> = (props) => {
+  const [isColorPicker, setIsColorPicker] = createSignal(false);
+
   const colors = [
     "#FFFFFF",
     "#FE4438",
@@ -34,29 +36,43 @@ const Colors: Component<ColorsProps> = (props) => {
   };
 
   const isActive = (color: string) => {
-    return color.toUpperCase() == props.color.toUpperCase();
+    return color.toUpperCase() == props.color.toUpperCase() && !isColorPicker();
   };
 
   return (
     <>
       <div class={styles.colors}>
-        <For each={colors}>
-          {(color) => (
-            <div
-              onClick={() => props.onChange(color)}
-              class={clsx(styles["color-wrapper"], {
-                [styles["color-wrapper--active"]]: isActive(color),
-              })}
-            >
-              <Color color={color} />
-            </div>
-          )}
-        </For>
-        <div class={styles["color-wrapper"]}>
+        <Show
+          when={!isColorPicker()}
+          fallback={<div class={styles.gradient} />}
+        >
+          <For each={colors}>
+            {(color) => (
+              <div
+                onClick={() => {
+                  setIsColorPicker(false);
+                  props.onChange(color);
+                }}
+                class={clsx(styles["color-wrapper"], {
+                  [styles["color-wrapper--active"]]: isActive(color),
+                })}
+              >
+                <Color color={color} />
+              </div>
+            )}
+          </For>
+        </Show>
+        <div
+          onClick={() => {
+            setIsColorPicker(!isColorPicker());
+          }}
+          class={clsx(styles["color-wrapper"], {
+            [styles["color-wrapper--active"]]: isColorPicker(),
+          })}
+        >
           <RainbowColor />
         </div>
       </div>
-      <div class={styles.gradient} />
     </>
   );
 };

@@ -29,10 +29,12 @@
       border-color: #2B2B2B;
     }
   }
-}
 
-.gradient {
-  height: 50px;
-  width: 100%;
-  background: linear-gradient(90deg in hsl longer hue, red, red);
+  .gradient {
+    height: 20px;
+    width: 100%;
+    margin: 10px 16px 10px 8px;
+    border-radius: 10px;
+    background: linear-gradient(90deg in hsl longer hue, red, red);
+  }
 }
