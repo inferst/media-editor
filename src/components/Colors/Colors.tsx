@@ -1,42 +1,60 @@
-import { Component, createSignal, For, Show } from "solid-js";
-import styles from "./Colors.module.css";
 import clsx from "clsx";
+import { Component, createMemo, createSignal, For, Show } from "solid-js";
+import styles from "./Colors.module.css";
+import GradientPicker from "./GradientPicker";
+import GradientSlider from "./GradientSlider";
+import { hexToHsv, HSV, hsvToHex } from "./colorConverters";
 
 type ColorProps = {
-  color: string;
+  color: HSV;
 };
 
 type ColorsProps = {
-  color: string;
+  colors: string[];
   onChange: (color: string) => void;
 };
 
 const Colors: Component<ColorsProps> = (props) => {
-  const [isColorPicker, setIsColorPicker] = createSignal(false);
+  const [color, setColor] = createSignal<HSV>({
+    h: 0,
+    s: 0,
+    v: 0,
+  });
 
-  const colors = [
-    "#FFFFFF",
-    "#FE4438",
-    "#FF8901",
-    "#FFD60A",
-    "#33C759",
-    "#62E5E0",
-    "#0A84FF",
-    "#BD5CF3",
-  ];
+  const [isColorPicker, setIsColorPicker] = createSignal(false);
+  const [sliderHue, setSliderHue] = createSignal(0);
+
+  const colors = createMemo(() => {
+    return props.colors.map((color) => {
+      return hexToHsv(color);
+    });
+  });
 
   const Color = (props: ColorProps) => {
-    return (
-      <div class={styles.color} style={{ "background-color": props.color }} />
-    );
+    const color = createMemo(() => {
+      return hsvToHex(props.color);
+    });
+
+    return <div class={styles.color} style={{ "background-color": color() }} />;
   };
 
   const RainbowColor = () => {
     return <div class={clsx(styles.color, styles["color--rainbow"])} />;
   };
 
-  const isActive = (color: string) => {
-    return color.toUpperCase() == props.color.toUpperCase() && !isColorPicker();
+  const isActive = (hsv: HSV) => {
+    return (
+      hsv.h == color().h &&
+      hsv.s == color().s &&
+      hsv.v == color().v &&
+      !isColorPicker()
+    );
+  };
+
+  const handleSliderHueChange = (hue: number) => {
+    const hex = hsvToHex({ ...color(), h: hue });
+    props.onChange(hex);
+    setColor({ ...color(), h: hue });
   };
 
   return (
@@ -44,14 +62,21 @@ const Colors: Component<ColorsProps> = (props) => {
       <div class={styles.colors}>
         <Show
           when={!isColorPicker()}
-          fallback={<div class={styles.gradient} />}
+          fallback={
+            <GradientSlider
+              hue={sliderHue()}
+              onChange={handleSliderHueChange}
+            />
+          }
         >
-          <For each={colors}>
+          <For each={colors()}>
             {(color) => (
               <div
                 onClick={() => {
                   setIsColorPicker(false);
-                  props.onChange(color);
+                  setColor(color);
+                  setSliderHue(color.h);
+                  props.onChange(hsvToHex(color));
                 }}
                 class={clsx(styles["color-wrapper"], {
                   [styles["color-wrapper--active"]]: isActive(color),
@@ -73,6 +98,23 @@ const Colors: Component<ColorsProps> = (props) => {
           <RainbowColor />
         </div>
       </div>
+      <Show when={isColorPicker()}>
+        <div class={styles.picker}>
+          <GradientPicker
+            hsv={color()}
+            onChange={(s, v) => {
+              setColor({ ...color(), s, v });
+              props.onChange(
+                hsvToHex({
+                  ...color(),
+                  s,
+                  v,
+                }),
+              );
+            }}
+          />
+        </div>
+      </Show>
     </>
   );
 };

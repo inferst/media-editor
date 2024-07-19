@@ -122,8 +122,6 @@ const Slider: ParentComponent<SliderProps> = (props) => {
       threshold: 0.5,
     };
 
-    console.log("mount");
-
     observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         init();
@@ -140,7 +138,6 @@ const Slider: ParentComponent<SliderProps> = (props) => {
     document.removeEventListener("mousemove", handleMouseMove);
 
     if (sliderRef) {
-      console.log(observer);
       observer.unobserve(sliderRef);
     }
   });

@@ -11,8 +11,6 @@ import Label from "../../Label/Label";
 import SidebarButton from "../../SidebarButton/SidebarButton";
 import SidebarRow from "../../SidebarRow/SidebarRow";
 import styles from "./Text.module.css";
-// import Slider from "../../CustomSlider/Slider";
-import Slider from "../../CustomSlider/Slider";
 
 type TextFont = {
   style: string;
@@ -59,19 +57,20 @@ const Text = () => {
     },
   ];
 
-  // const [value, setValue] = createSignal(24);
+  const colors = [
+    "#FFFFFF",
+    "#FE4438",
+    "#FF8901",
+    "#FFD60A",
+    "#33C759",
+    "#62E5E0",
+    "#0A84FF",
+    "#BD5CF3",
+  ];
 
   return (
     <>
-      <Colors color={color()} onChange={setColor} />
-      {/* <Slider */}
-      {/*   min={0} */}
-      {/*   max={48} */}
-      {/*   default={0} */}
-      {/*   onChange={setValue} */}
-      {/*   value={value()} */}
-      {/* /> */}
-      <Slider onChange={() => {}} />
+      <Colors colors={colors} onChange={setColor} />
       <div class={styles["text-row"]}>
         <SidebarRow isColumn={true}>
           <SidebarButton icon={<LeftSVG />} isActive={true} />
@@ -91,6 +90,7 @@ const Text = () => {
         default={0}
         value={size()}
         onChange={setSize}
+        color={color()}
       />
       <Label class={styles.label}>Font</Label>
       <SidebarRow>

@@ -14,6 +14,8 @@ const Enhance = () => {
   const [grain, setGrain] = createSignal(0);
   const [sharpen, setSharpen] = createSignal(0);
 
+  const color = '#4E8EE5';
+
   return (
     <>
       <Adjust
@@ -23,6 +25,8 @@ const Enhance = () => {
         max={100}
         default={0}
         heading="Enhance"
+        color={color}
+        variant="highlight"
       />
       <Adjust
         onChange={setBrightness}
@@ -31,6 +35,8 @@ const Enhance = () => {
         max={100}
         default={0}
         heading="Brightness"
+        color={color}
+        variant="highlight"
       />
       <Adjust
         onChange={setContrast}
@@ -39,6 +45,8 @@ const Enhance = () => {
         max={100}
         default={0}
         heading="Contrast"
+        color={color}
+        variant="highlight"
       />
       <Adjust
         onChange={setSaturation}
@@ -47,6 +55,8 @@ const Enhance = () => {
         max={100}
         default={0}
         heading="Saturation"
+        color={color}
+        variant="highlight"
       />
       <Adjust
         onChange={setWarmth}
@@ -55,6 +65,8 @@ const Enhance = () => {
         max={100}
         default={0}
         heading="Warmth"
+        color={color}
+        variant="highlight"
       />
       <Adjust
         onChange={setFade}
@@ -63,6 +75,8 @@ const Enhance = () => {
         max={100}
         default={0}
         heading="Fade"
+        color={color}
+        variant="highlight"
       />
       <Adjust
         onChange={setHighlights}
@@ -71,6 +85,8 @@ const Enhance = () => {
         max={100}
         default={0}
         heading="Highlights"
+        color={color}
+        variant="highlight"
       />
       <Adjust
         onChange={setShadows}
@@ -79,6 +95,8 @@ const Enhance = () => {
         max={100}
         default={0}
         heading="Shadows"
+        color={color}
+        variant="highlight"
       />
       <Adjust
         onChange={setVignette}
@@ -87,6 +105,8 @@ const Enhance = () => {
         max={100}
         default={0}
         heading="Vignette"
+        color={color}
+        variant="highlight"
       />
       <Adjust
         onChange={setGrain}
@@ -95,6 +115,8 @@ const Enhance = () => {
         max={100}
         default={0}
         heading="Grain"
+        color={color}
+        variant="highlight"
       />
       <Adjust
         onChange={setSharpen}
@@ -103,6 +125,8 @@ const Enhance = () => {
         max={100}
         default={0}
         heading="Sharpen"
+        color={color}
+        variant="highlight"
       />
     </>
   );

@@ -38,3 +38,7 @@
     background: linear-gradient(90deg in hsl longer hue, red, red);
   }
 }
+
+.picker {
+  margin: 24px;
+}

@@ -1,4 +1,28 @@
 .adjust {
+    /* &.default { */
+    /*     .value { */
+    /*         color: #AAAAAA; */
+    /*     } */
+    /**/
+    /*     .heading { */
+    /*         color: #AAAAAA; */
+    /*     } */
+    /* } */
+
+    &.highlight {
+        .value {
+            color: #FFFFFF;
+
+            &.empty {
+                color: #717579;
+            }
+        }
+
+        .heading {
+            color: #FFFFFF;
+        }
+    }
+
     .value {
         color: #AAAAAA;
     }
