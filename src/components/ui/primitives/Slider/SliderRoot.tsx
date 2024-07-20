@@ -6,8 +6,8 @@ import {
   onMount,
   ParentComponent,
 } from "solid-js";
+import { linearScale } from "../../../helpers";
 import { SliderContext, SliderContextValue } from "./sliderContext";
-import { linearScale } from "../helpers";
 
 type SliderProps = {
   value?: number;

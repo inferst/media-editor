@@ -1,4 +1,4 @@
-import { linearScale } from "../helpers";
+import { linearScale } from "../../helpers";
 
 export const getHue = (
   value: number,

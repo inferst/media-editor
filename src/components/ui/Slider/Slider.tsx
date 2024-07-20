@@ -1,9 +1,9 @@
 import { Component } from "solid-js";
 import styles from "./Slider.module.css";
-import SliderRange from "./SliderRange";
-import SliderRoot from "./SliderRoot";
-import SliderThumb from "./SliderThumb";
-import SliderTrack from "./SliderTrack";
+import SliderRoot from "../primitives/Slider/SliderRoot";
+import SliderTrack from "../primitives/Slider/SliderTrack";
+import SliderRange from "../primitives/Slider/SliderRange";
+import SliderThumb from "../primitives/Slider/SliderThumb";
 
 type SliderProps = {
   value?: number;

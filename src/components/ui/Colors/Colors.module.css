@@ -17,7 +17,7 @@
 
       &.color--rainbow {
         background-size: contain;
-        background-image: url('../../assets/icons/rainbow.png');
+        background-image: url('../../../assets/icons/rainbow.png');
       }
     }
 

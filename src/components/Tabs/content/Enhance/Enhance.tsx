@@ -1,5 +1,5 @@
 import { createSignal } from "solid-js";
-import Adjust from "../../Adjust/Adjust";
+import Adjust from "../../../ui/Adjust/Adjust";
 
 const Enhance = () => {
   const [enhance, setEnhance] = createSignal(50);

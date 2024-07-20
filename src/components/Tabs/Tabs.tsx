@@ -6,9 +6,9 @@ import TextSVG from "@assets/icons/text.svg";
 import clsx from "clsx";
 import { createMemo, createSignal, For, JSX, ValidComponent } from "solid-js";
 import { Dynamic } from "solid-js/web";
-import Crop from "../content/Crop/Crop";
-import Enhance from "../content/Enhance/Enhance";
-import Text from "../content/Text/Text";
+import Crop from "./content/Crop/Crop";
+import Enhance from "./content/Enhance/Enhance";
+import Text from "./content/Text/Text";
 import Tab, { TabItemType } from "./Tab";
 import styles from "./Tabs.module.css";
 

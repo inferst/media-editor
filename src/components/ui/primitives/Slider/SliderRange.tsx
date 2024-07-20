@@ -1,6 +1,6 @@
 import { ParentComponent } from "solid-js";
-import { useSliderContext } from "./sliderContext";
 import { JSX } from "solid-js/h/jsx-runtime";
+import { useSliderContext } from "./sliderContext";
 
 export type SliderRangeProps = {
   style?: JSX.CSSProperties;

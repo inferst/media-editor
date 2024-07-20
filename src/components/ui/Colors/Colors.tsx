@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import { Component, createMemo, createSignal, For, Show } from "solid-js";
 import styles from "./Colors.module.css";
-import GradientPicker from "./GradientPicker";
-import GradientSlider from "./GradientSlider";
+import GradientPicker from "./GradientPicker/GradientPicker";
+import GradientSlider from "./GradientSlider/GradientSlider";
 import { hexToHsv, HSV, hsvToHex } from "./colorConverters";
 
 type ColorProps = {
@@ -18,7 +18,7 @@ const Colors: Component<ColorsProps> = (props) => {
   const [color, setColor] = createSignal<HSV>({
     h: 0,
     s: 0,
-    v: 0,
+    v: 100,
   });
 
   const [isColorPicker, setIsColorPicker] = createSignal(false);
@@ -90,6 +90,7 @@ const Colors: Component<ColorsProps> = (props) => {
         <div
           onClick={() => {
             setIsColorPicker(!isColorPicker());
+            setSliderHue(color().h);
           }}
           class={clsx(styles["color-wrapper"], {
             [styles["color-wrapper--active"]]: isColorPicker(),
