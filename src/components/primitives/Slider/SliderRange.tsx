@@ -15,8 +15,8 @@ const SliderRange: ParentComponent<SliderRangeProps> = (props) => {
       class={props.class}
       style={{
         position: 'absolute',
-        left: `${context.state.offsetStart()}%`,
-        width: `${context.state.offsetEnd()}%`,
+        left: `${context.state.start()}%`,
+        width: `${context.state.end()}%`,
         ...props.style,
       }}
     />

@@ -1,5 +1,5 @@
 import { createSignal } from "solid-js";
-import Adjust from "../../../ui/Adjust/Adjust";
+import Adjust from "../../ui/Adjust/Adjust";
 
 const Enhance = () => {
   const [enhance, setEnhance] = createSignal(50);
@@ -14,7 +14,7 @@ const Enhance = () => {
   const [grain, setGrain] = createSignal(0);
   const [sharpen, setSharpen] = createSignal(0);
 
-  const color = '#4E8EE5';
+  const color = "#4E8EE5";
 
   return (
     <>

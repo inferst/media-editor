@@ -1,38 +1,27 @@
 .adjust {
-    /* &.default { */
-    /*     .value { */
-    /*         color: #AAAAAA; */
-    /*     } */
-    /**/
-    /*     .heading { */
-    /*         color: #AAAAAA; */
-    /*     } */
-    /* } */
+  .value {
+    color: #aaa;
+  }
 
-    &.highlight {
-        .value {
-            color: #FFFFFF;
+  .heading {
+    color: #aaa;
+  }
 
-            &.empty {
-                color: #717579;
-            }
-        }
-
-        .heading {
-            color: #FFFFFF;
-        }
-    }
-
+  &.highlight {
     .value {
-        color: #AAAAAA;
+      color: #fff;
+
+      &.empty {
+        color: #717579;
+      }
     }
 
     .heading {
-        color: #AAAAAA;
+      color: #fff;
     }
+  }
 }
 
 .slider {
-    padding: 0 24px;
-
+  padding: 0 24px;
 }

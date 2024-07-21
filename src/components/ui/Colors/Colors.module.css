@@ -2,43 +2,17 @@
   display: flex;
   justify-content: space-between;
   padding: 4px 16px;
-
-  .color-wrapper {
-    cursor: pointer;
-    border-radius: 20px;
-    border-width: 10px;
-    border-style: solid;
-    border-color: transparent;
-
-    .color {
-      width: 20px;
-      height: 20px;
-      border-radius: 10px;
-
-      &.color--rainbow {
-        background-size: contain;
-        background-image: url('../../../assets/icons/rainbow.png');
-      }
-    }
-
-    &.color-wrapper--active {
-      border-color: #2B2B2B;
-    }
-
-    &:hover {
-      border-color: #2B2B2B;
-    }
-  }
-
-  .gradient {
-    height: 20px;
-    width: 100%;
-    margin: 10px 16px 10px 8px;
-    border-radius: 10px;
-    background: linear-gradient(90deg in hsl longer hue, red, red);
-  }
 }
 
 .picker {
+  display: flex;
   margin: 24px;
+
+  .input {
+    margin-left: 24px;
+
+    & > :nth-child(2) {
+      margin-top: 24px;
+    }
+  }
 }

@@ -8,17 +8,11 @@ export type SliderTrackProps = {
 const SliderTrack: ParentComponent<SliderTrackProps> = (props) => {
   const context = useSliderContext("SliderTrack");
 
-  const handleMouseDown = (event: MouseEvent) => {
-    event.stopPropagation();
-    event.preventDefault();
-
-    context.onSlideStart(event.pageX);
-  }
-
   return (
     <div
-      onMouseDown={handleMouseDown}
-      ref={context.state.registerTrack}
+      ref={(ref) => {
+        context.state.registerTrack(ref);
+      }}
       class={props.class}
     >
       {props.children}

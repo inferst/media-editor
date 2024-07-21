@@ -1,11 +1,11 @@
 import { Component, createEffect, createSignal } from "solid-js";
-import { linearScale } from "../../../helpers";
-import SliderRange from "../../primitives/Slider/SliderRange";
-import SliderRoot from "../../primitives/Slider/SliderRoot";
-import SliderThumb from "../../primitives/Slider/SliderThumb";
-import SliderTrack from "../../primitives/Slider/SliderTrack";
-import { hexToHsv } from "../colorConverters";
-import styles from "./GradientSlider.module.css";
+import { linearScale } from "../../../../utils/number";
+import SliderRange from "../../../primitives/Slider/SliderRange";
+import SliderRoot from "../../../primitives/Slider/SliderRoot";
+import SliderThumb from "../../../primitives/Slider/SliderThumb";
+import SliderTrack from "../../../primitives/Slider/SliderTrack";
+import { hexToHsv } from "../../../../utils/color";
+import styles from "./HueSlider.module.css";
 
 export type ColorGradientStep = {
   color: string;
@@ -58,7 +58,8 @@ const toHueGradient = (gradient: ColorGradientStep[]): HueGradientStep[] => {
   return result;
 };
 
-const GradientSlider: Component<GradientSliderProps> = (props) => {
+// TODO: refactor please, looks bad
+const HueSlider: Component<GradientSliderProps> = (props) => {
   const [value, setValue] = createSignal(0);
 
   const hueGradient = toHueGradient(gradient);
@@ -95,6 +96,8 @@ const GradientSlider: Component<GradientSliderProps> = (props) => {
         return converted;
       }
     }
+
+    return prev;
   }, 0);
 
   const [hue, setHue] = createSignal(0);
@@ -145,15 +148,15 @@ const GradientSlider: Component<GradientSliderProps> = (props) => {
     >
       <SliderTrack class={styles.track}>
         <SliderRange class={styles.range} />
+        <SliderThumb
+          class={styles.thumb}
+          style={{
+            "background-color": `hsl(${hue()} 100% 50%)`,
+          }}
+        />
       </SliderTrack>
-      <SliderThumb
-        class={styles.thumb}
-        style={{
-          "background-color": `hsl(${hue()} 100% 50%)`,
-        }}
-      />
     </SliderRoot>
   );
 };
 
-export default GradientSlider;
+export default HueSlider;

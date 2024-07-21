@@ -6,7 +6,7 @@ import styles from "./Sidebar.module.css";
 export function Sidebar() {
   return (
     <div class={styles.sidebar}>
-      <div class={styles["sidebar__title"]}>
+      <div class={styles.heading}>
         <div class={styles.title}>Edit</div>
         <div class={styles["undo-redo"]}>
           <div class={styles.undo}>

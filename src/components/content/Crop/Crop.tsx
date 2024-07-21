@@ -11,10 +11,10 @@ import Ratio9x16SVG from "@assets/icons/9x16.svg";
 import FreeSVG from "@assets/icons/free.svg";
 import OriginalSVG from "@assets/icons/imageoriginal.svg";
 import SquareSVG from "@assets/icons/square.svg";
-import Label from "../../../ui/Label/Label";
-import SidebarButton from "../../../ui/SidebarButton/SidebarButton";
-import SidebarRow from "../../../ui/SidebarRow/SidebarRow";
-import styles from './Crop.module.css';
+import Label from "../../ui/Label/Label";
+import SidebarButton from "../../ui/SidebarButton/SidebarButton";
+import SidebarRow from "../../ui/SidebarRow/SidebarRow";
+import styles from "./Crop.module.css";
 
 const Crop = () => {
   return (

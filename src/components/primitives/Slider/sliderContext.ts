@@ -1,9 +1,9 @@
 import { Accessor, createContext, useContext } from "solid-js";
 
 export type SliderState = {
-  offsetStart: Accessor<number>;
-  offsetEnd: Accessor<number>;
   position: Accessor<number>;
+  start: Accessor<number>;
+  end: Accessor<number>;
   trackRef: Accessor<HTMLElement | undefined>;
   thumbRef: Accessor<HTMLElement | undefined>;
   registerTrack: (ref: HTMLElement) => void;
@@ -12,7 +12,6 @@ export type SliderState = {
 
 export type SliderContextValue = {
   state: SliderState;
-  onSlideStart: (value?: number) => void;
 };
 
 export const SliderContext = createContext<SliderContextValue>();

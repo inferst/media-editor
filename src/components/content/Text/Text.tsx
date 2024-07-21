@@ -5,11 +5,11 @@ import BlackSVG from "@assets/icons/black.svg";
 import NoFrameSVG from "@assets/icons/no_frame.svg";
 import WhiteSVG from "@assets/icons/white.svg";
 import { createSignal, For } from "solid-js";
-import Adjust from "../../../ui/Adjust/Adjust";
-import Colors from "../../../ui/Colors/Colors";
-import Label from "../../../ui/Label/Label";
-import SidebarButton from "../../../ui/SidebarButton/SidebarButton";
-import SidebarRow from "../../../ui/SidebarRow/SidebarRow";
+import Adjust from "../../ui/Adjust/Adjust";
+import Colors from "../../ui/Colors/Colors";
+import Label from "../../ui/Label/Label";
+import SidebarButton from "../../ui/SidebarButton/SidebarButton";
+import SidebarRow from "../../ui/SidebarRow/SidebarRow";
 import styles from "./Text.module.css";
 
 type TextFont = {

@@ -2,11 +2,10 @@
   flex-shrink: 0;
   width: 400px;
   background: #212121;
-
   display: flex;
   flex-direction: column;
 
-  .sidebar__title {
+  .heading {
     display: flex;
     padding: 0 8px;
 
@@ -19,7 +18,7 @@
     .undo-redo {
       display: flex;
       padding: 16px;
-      fill: #AAAAAA;
+      fill: #aaa;
 
       .undo {
         display: flex;
@@ -33,5 +32,4 @@
       }
     }
   }
-
 }

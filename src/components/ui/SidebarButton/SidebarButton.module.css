@@ -23,11 +23,11 @@
     flex-grow: 0;
   }
 
-  &.row--active {
-    background-color: #2B2B2B;
+  &.active {
+    background-color: #2b2b2b;
   }
 
   &:hover {
-    background-color: #2B2B2B;
+    background-color: #2b2b2b;
   }
 }

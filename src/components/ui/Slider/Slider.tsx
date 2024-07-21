@@ -1,9 +1,9 @@
 import { Component } from "solid-js";
+import SliderRange from "../../primitives/Slider/SliderRange";
+import SliderRoot from "../../primitives/Slider/SliderRoot";
+import SliderThumb from "../../primitives/Slider/SliderThumb";
+import SliderTrack from "../../primitives/Slider/SliderTrack";
 import styles from "./Slider.module.css";
-import SliderRoot from "../primitives/Slider/SliderRoot";
-import SliderTrack from "../primitives/Slider/SliderTrack";
-import SliderRange from "../primitives/Slider/SliderRange";
-import SliderThumb from "../primitives/Slider/SliderThumb";
 
 type SliderProps = {
   value?: number;
@@ -25,9 +25,15 @@ const Slider: Component<SliderProps> = (props) => {
       class={styles.root}
     >
       <SliderTrack class={styles.track}>
-        <SliderRange class={styles.range} style={{"background-color": props.color}} />
+        <SliderRange
+          class={styles.range}
+          style={{ "background-color": props.color }}
+        />
+        <SliderThumb
+          class={styles.thumb}
+          style={{ "background-color": props.color }}
+        />
       </SliderTrack>
-      <SliderThumb class={styles.thumb} style={{"background-color": props.color}}/>
     </SliderRoot>
   );
 };

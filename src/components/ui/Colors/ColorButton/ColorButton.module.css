@@ -1,0 +1,26 @@
+.wrapper {
+  cursor: pointer;
+  border-radius: 20px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent;
+
+  .color {
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+
+    &.rainbow {
+      background-size: contain;
+      background-image: url("../../../../assets/icons/rainbow.png");
+    }
+  }
+
+  &.active {
+    border-color: #2b2b2b;
+  }
+
+  &:hover {
+    border-color: #2b2b2b;
+  }
+}

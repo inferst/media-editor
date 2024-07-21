@@ -1,4 +1,4 @@
-import styles from './Editor.module.css';
+import styles from "./Editor.module.css";
 
 export function Editor() {
   return (

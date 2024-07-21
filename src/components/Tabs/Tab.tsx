@@ -18,7 +18,7 @@ const Tab: ParentComponent<TabProps> = (props): JSX.Element => {
   return (
     <div
       onClick={handleClick}
-      class={clsx(styles.tab, { [styles["tab--active"]]: props.isActive })}
+      class={clsx(styles.tab, { [styles.active]: props.isActive })}
     >
       {props.children}
     </div>

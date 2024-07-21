@@ -1,63 +1,25 @@
-/* .slider { */
-/*     position: relative; */
-/*     height: 4px; */
-/*     padding-bottom: 32px; */
-/**/
-/*     .slider-thumb { */
-/*         position: absolute; */
-/*         width: 20px; */
-/*         height: 20px; */
-/*         margin-top: -12px; */
-/*         border-radius: 10px; */
-/*         background-color: #FFFFFF; */
-/*         cursor: pointer; */
-/*     } */
-/**/
-/*     .slider-track { */
-/*         background: #AAAAAA1A; */
-/*         border-radius: 2px; */
-/*         height: 4px; */
-/*         cursor: pointer; */
-/**/
-/*         .slider-track--active { */
-/*             position: absolute; */
-/*             height: 4px; */
-/*             width: 100%; */
-/*             background-color: #FFFFFF; */
-/*             border-radius: 2px; */
-/*         } */
-/*     } */
-/* } */
-
 .root {
+  margin-bottom: 32px;
+
+  .track {
+    background: #aaaaaa1a;
+    border-radius: 2px;
     height: 4px;
-    padding-bottom: 32px;
+    cursor: pointer;
+
+    .range {
+      height: 4px;
+      background-color: #fff;
+      border-radius: 2px;
+    }
 
     .thumb {
-        width: 20px;
-        height: 20px;
-        margin-top: -12px;
-        border-radius: 10px;
-        background-color: #FFFFFF;
-        cursor: pointer;
+      width: 20px;
+      height: 20px;
+      margin-top: -8px;
+      border-radius: 10px;
+      background-color: #fff;
+      cursor: pointer;
     }
-
-    .track {
-        background: #AAAAAA1A;
-        border-radius: 2px;
-        height: 4px;
-        cursor: pointer;
-
-        .range {
-            height: 4px;
-            background-color: #FFFFFF;
-            border-radius: 2px;
-            /* background: linear-gradient(to right, */
-            /*         red 20%, */
-            /*         orange 40%, */
-            /*         yellow 60%, */
-            /*         green 80%, */
-            /*         blue 100%); */
-        }
-    }
+  }
 }

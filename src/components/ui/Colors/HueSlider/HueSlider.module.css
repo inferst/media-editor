@@ -1,0 +1,33 @@
+.root {
+  width: 100%;
+  margin: 10px;
+
+  .track {
+    background: linear-gradient(
+      90deg,
+      #ff0000 5.21%,
+      #ff8a00 16.48%,
+      #ffe600 27.74%,
+      #14ff00 39.35%,
+      #00a3ff 49.37%,
+      #0500ff 61.18%,
+      #ad00ff 72.26%,
+      #ff00c7 83.53%,
+      #ff0000 94.61%
+    );
+    border-radius: 10px;
+    height: 20px;
+    cursor: pointer;
+
+    .thumb {
+      width: 20px;
+      height: 20px;
+      margin-top: -2px;
+      border-style: solid;
+      border-width: 2px;
+      border-radius: 12px;
+      border-color: #fff;
+      cursor: pointer;
+    }
+  }
+}
