@@ -2,7 +2,7 @@
   width: 100%;
   background: black;
 
-  img {
+  canvas {
     display: block;
     object-fit: contain;
     width: 100%;

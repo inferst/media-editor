@@ -11,6 +11,8 @@ import Enhance from "../content/Enhance/Enhance";
 import Text from "../content/Text/Text";
 import Tab, { TabItemType } from "./Tab";
 import styles from "./Tabs.module.css";
+import Brush from "../content/Brush/Brush";
+import Smile from "../content/Smile/Smile";
 
 export type TabItem = {
   type: TabItemType;
@@ -23,7 +25,8 @@ export type TabsProps = {
 };
 
 export function Tabs() {
-  const [currentTabType, setCurrentTabType] = createSignal<TabItemType>("enhance");
+  const [currentTabType, setCurrentTabType] =
+    createSignal<TabItemType>("enhance");
 
   const tabs: TabItem[] = [
     {
@@ -44,12 +47,12 @@ export function Tabs() {
     {
       type: "brush",
       tab: <BrushSVG />,
-      content: "",
+      content: Brush,
     },
     {
       type: "smile",
       tab: <SmileSVG />,
-      content: "",
+      content: Smile,
     },
   ];
 
