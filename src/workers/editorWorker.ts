@@ -1,31 +1,132 @@
 import {
   isContrastData,
+  isEnhanceData,
   isFadeData,
   isGrainData,
   isHighlightsData,
   isOffscreenData,
   isSaturationData,
   isShadowsData,
+  isSharpenData,
   isVignetteData,
   isWarmthData,
   OffscreenData,
 } from "../types/types";
-import BASE_FRAGMENT_SHADER from "./shaders/frag.glsl?raw";
-import BASE_VERTEX_SHADER from "./shaders/vert.glsl?raw";
+
+import toolFragShader from "./shaders/tool/frag.glsl?raw";
+import toolVertShader from "./shaders/tool/vert.glsl?raw";
+
+import sharpenFragShader from "./shaders/sharpen/frag.glsl?raw";
+import sharpenVertShader from "./shaders/sharpen/vert.glsl?raw";
+
+import enhanceFragShader from "./shaders/enhance/frag.glsl?raw";
+import enhanceVertShader from "./shaders/enhance/vert.glsl?raw";
 
 let canvas;
 let gl: WebGLRenderingContext | null;
 
-let contrastLoc: WebGLUniformLocation | null;
-let warmthLoc: WebGLUniformLocation | null;
-let grainLoc: WebGLUniformLocation | null;
-let highlightsLoc: WebGLUniformLocation | null;
-let shadowsLoc: WebGLUniformLocation | null;
-let fadeAmountLoc: WebGLUniformLocation | null;
-let vignetteLoc: WebGLUniformLocation | null;
-let saturationLoc: WebGLUniformLocation | null;
+let toolContrastLocation: WebGLUniformLocation | null;
+let toolWarmthLocation: WebGLUniformLocation | null;
+let toolGrainLocation: WebGLUniformLocation | null;
+let toolHighlightsLocation: WebGLUniformLocation | null;
+let toolShadowsLocation: WebGLUniformLocation | null;
+let toolFadeLocation: WebGLUniformLocation | null;
+let toolVignetteLocation: WebGLUniformLocation | null;
+let toolSaturationLocation: WebGLUniformLocation | null;
+let toolWidthLocation: WebGLUniformLocation | null;
+let toolHeightLocation: WebGLUniformLocation | null;
 
-const drawImage = async (imageBitmap: ImageBitmap) => {
+// let sharpenLocation: WebGLUniformLocation | null;
+
+let enhanceIntensityLocation: WebGLUniformLocation | null;
+let enhanceSTextureLocation: WebGLUniformLocation | null;
+let enhanceInputImageTexture2Location: WebGLUniformLocation | null;
+let enhanceWidthLocation: WebGLUniformLocation | null;
+let enhanceHeightLocation: WebGLUniformLocation | null;
+
+let toolProgram: WebGLProgram | null;
+let enhanceProgram: WebGLProgram | null;
+
+// type UniformLocation =
+//   | "contrast"
+//   | "warmth"
+//   | "grain"
+//   | "highlights"
+//   | "shadows"
+//   | "fade"
+//   | "vignette"
+//   | "saturation"
+//   | "width"
+//   | "height"
+//   | "sharpen"
+//   | "intensity"
+//   | "sTexture"
+//   | "inputImageTexture2";
+//
+// type UniformLocations = {
+//   [key in UniformLocation]?: WebGLUniformLocation;
+// };
+//
+// type ProgramLocations = {
+//   program: WebGLProgram;
+//   locations: UniformLocations;
+// };
+//
+// const locations: ProgramLocations[] = [];
+//
+// const setLocation = (name: UniformLocation, program: WebGLProgram) => {
+//   if (gl) {
+//     const location = gl.getUniformLocation(program, name);
+//
+//     if (location == null) {
+//       throw Error(`UniformLocation ${name} is null`);
+//     }
+//
+//     const found = locations.find((location) => location.program == program);
+//
+//     if (found) {
+//       found.locations[name] = location;
+//     } else {
+//       locations.push({
+//         program,
+//         locations: { [name]: location },
+//       });
+//     }
+//   }
+// };
+
+// const setUniform = (
+//   name: UniformLocation,
+//   value: number,
+//   type: "float" | "int" = "float",
+// ) => {
+//   if (gl) {
+//     for (const loc of locations) {
+//       const location = loc.locations[name];
+//
+//       if (location) {
+//         if (type == "float") {
+//           gl.uniform1f(location, value);
+//         } else if (type == "int") {
+//           gl.uniform1i(location, value);
+//         }
+//       }
+//     }
+//   }
+// };
+
+// const updateUniform = (name: UniformLocation, value: number) => {
+//   setUniform(name, value);
+//   draw();
+// };
+
+const draw = () => {
+  if (gl) {
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+  }
+};
+
+const initImage = async (imageBitmap: ImageBitmap) => {
   if (!gl) {
     return;
   }
@@ -48,10 +149,225 @@ const drawImage = async (imageBitmap: ImageBitmap) => {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 };
 
-const draw = () => {
-  if (gl) {
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
+const initToolShaders = (imageBitmap: ImageBitmap) => {
+  if (!gl) {
+    return;
   }
+
+  // Create our program
+  toolProgram = gl.createProgram();
+
+  if (!toolProgram) {
+    return;
+  }
+
+  // Create our vertex shader
+  const vertexShader = gl.createShader(gl.VERTEX_SHADER);
+
+  if (!vertexShader) {
+    return;
+  }
+
+  gl.shaderSource(vertexShader, toolVertShader);
+  gl.compileShader(vertexShader);
+
+  // Create our fragment shader
+  const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+
+  if (!fragmentShader) {
+    return;
+  }
+
+  gl.shaderSource(fragmentShader, toolFragShader);
+  gl.compileShader(fragmentShader);
+
+  gl.attachShader(toolProgram, vertexShader);
+  gl.attachShader(toolProgram, fragmentShader);
+
+  gl.linkProgram(toolProgram);
+
+  // Enable the program
+  gl.useProgram(toolProgram);
+
+  toolContrastLocation = gl.getUniformLocation(toolProgram, "contrast");
+  toolWarmthLocation = gl.getUniformLocation(toolProgram, "warmth");
+  toolHighlightsLocation = gl.getUniformLocation(toolProgram, "highlights");
+  toolShadowsLocation = gl.getUniformLocation(toolProgram, "shadows");
+  toolFadeLocation = gl.getUniformLocation(toolProgram, "fade");
+  toolVignetteLocation = gl.getUniformLocation(toolProgram, "vignette");
+  toolSaturationLocation = gl.getUniformLocation(toolProgram, "saturation");
+  toolGrainLocation = gl.getUniformLocation(toolProgram, "grain");
+
+  toolWidthLocation = gl.getUniformLocation(toolProgram, "width");
+  toolHeightLocation = gl.getUniformLocation(toolProgram, "height");
+
+  gl.uniform1f(toolContrastLocation, 1);
+  gl.uniform1f(toolSaturationLocation, 1);
+  gl.uniform1f(toolShadowsLocation, 1);
+  gl.uniform1f(toolHighlightsLocation, 1);
+
+  gl.uniform1f(toolWidthLocation, imageBitmap.width);
+  gl.uniform1f(toolHeightLocation, imageBitmap.height);
+
+  // Bind VERTICES as the active array buffer.
+  const VERTICES = new Float32Array([-1, -1, -1, 1, 1, 1, -1, -1, 1, 1, 1, -1]);
+
+  const vertexBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, VERTICES, gl.STATIC_DRAW);
+
+  // Set and enable our array buffer as the program's "position" variable
+  const positionLocation = gl.getAttribLocation(toolProgram, "position");
+  gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(positionLocation);
+};
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const initEnhanceShaders = (imageBitmap: ImageBitmap) => {
+  if (!gl) {
+    return;
+  }
+
+  // Create our program
+  enhanceProgram = gl.createProgram();
+
+  if (!enhanceProgram) {
+    return;
+  }
+
+  // Create our vertex shader
+  const vertexShader = gl.createShader(gl.VERTEX_SHADER);
+
+  if (!vertexShader) {
+    return;
+  }
+
+  gl.shaderSource(vertexShader, enhanceVertShader);
+  gl.compileShader(vertexShader);
+
+  // Create our fragment shader
+  const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+
+  if (!fragmentShader) {
+    return;
+  }
+
+  gl.shaderSource(fragmentShader, enhanceFragShader);
+  gl.compileShader(fragmentShader);
+
+  gl.attachShader(enhanceProgram, vertexShader);
+  gl.attachShader(enhanceProgram, fragmentShader);
+
+  gl.linkProgram(enhanceProgram);
+
+  // Enable the program
+  gl.useProgram(enhanceProgram);
+
+  enhanceIntensityLocation = gl.getUniformLocation(enhanceProgram, "intensity");
+  enhanceSTextureLocation = gl.getUniformLocation(enhanceProgram, "sTexture");
+  enhanceInputImageTexture2Location = gl.getUniformLocation(
+    enhanceProgram,
+    "inputImageTexture2",
+  );
+  enhanceWidthLocation = gl.getUniformLocation(enhanceProgram, "enhanceWidth");
+  enhanceHeightLocation = gl.getUniformLocation(
+    enhanceProgram,
+    "enhanceHeight",
+  );
+
+  gl.uniform1f(enhanceIntensityLocation, 1);
+  gl.uniform1i(enhanceSTextureLocation, 0);
+  gl.uniform1i(enhanceInputImageTexture2Location, 1);
+  gl.uniform1i(enhanceInputImageTexture2Location, 1);
+
+  gl.uniform1f(enhanceWidthLocation, imageBitmap.width);
+  gl.uniform1f(enhanceHeightLocation, imageBitmap.height);
+
+  // setLocation("contrast", program);
+  // setLocation("warmth", program);
+  // setLocation("highlights", program);
+  // setLocation("shadows", program);
+  // setLocation("fade", program);
+  // setLocation("vignette", program);
+  // setLocation("saturation", program);
+  // setLocation("grain", program);
+  //
+  // setLocation("width", program);
+  // setLocation("height", program);
+  //
+  // setUniform("contrast", 1);
+  // setUniform("saturation", 1);
+  // setUniform("shadows", 1);
+  // setUniform("highlights", 1);
+
+  // Bind VERTICES as the active array buffer.
+  const VERTICES = new Float32Array([-1, -1, -1, 1, 1, 1, -1, -1, 1, 1, 1, -1]);
+
+  const vertexBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, VERTICES, gl.STATIC_DRAW);
+
+  // Set and enable our array buffer as the program's "position" variable
+  const positionLocation = gl.getAttribLocation(enhanceProgram, "position");
+  gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(positionLocation);
+};
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const initSharpenShaders = () => {
+  if (!gl) {
+    return;
+  }
+
+  // Create our program
+  const program = gl.createProgram();
+
+  if (!program) {
+    return;
+  }
+
+  // Create our vertex shader
+  const vertexShader = gl.createShader(gl.VERTEX_SHADER);
+
+  if (!vertexShader) {
+    return;
+  }
+
+  gl.shaderSource(vertexShader, sharpenVertShader);
+  gl.compileShader(vertexShader);
+
+  // Create our fragment shader
+  const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+
+  if (!fragmentShader) {
+    return;
+  }
+
+  gl.shaderSource(fragmentShader, sharpenFragShader);
+  gl.compileShader(fragmentShader);
+
+  gl.attachShader(program, vertexShader);
+  gl.attachShader(program, fragmentShader);
+
+  gl.linkProgram(program);
+
+  // Enable the program
+  gl.useProgram(program);
+
+  // setLocation("width", program);
+  // setLocation("height", program);
+
+  // Bind VERTICES as the active array buffer.
+  const VERTICES = new Float32Array([-1, -1, -1, 1, 1, 1, -1, -1, 1, 1, 1, -1]);
+
+  const vertexBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, VERTICES, gl.STATIC_DRAW);
+
+  // Set and enable our array buffer as the program's "position" variable
+  const positionLocation = gl.getAttribLocation(program, "position");
+  gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(positionLocation);
 };
 
 const init = async (data: OffscreenData) => {
@@ -65,68 +381,11 @@ const init = async (data: OffscreenData) => {
 
   gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
-  // Create our vertex shader
-  const vertexShader = gl.createShader(gl.VERTEX_SHADER);
+  initToolShaders(data.bitmap);
+  initEnhanceShaders(data.bitmap);
+  // initSharpenShaders();
 
-  if (!vertexShader) {
-    return;
-  }
-
-  gl.shaderSource(vertexShader, BASE_VERTEX_SHADER);
-  gl.compileShader(vertexShader);
-
-  // Create our fragment shader
-  const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-
-  if (!fragmentShader) {
-    return;
-  }
-
-  gl.shaderSource(fragmentShader, BASE_FRAGMENT_SHADER);
-  gl.compileShader(fragmentShader);
-
-  // Create our program
-  const program = gl.createProgram();
-
-  if (!program) {
-    return;
-  }
-
-  gl.attachShader(program, vertexShader);
-  gl.attachShader(program, fragmentShader);
-  gl.linkProgram(program);
-
-  // Enable the program
-  gl.useProgram(program);
-
-  contrastLoc = gl.getUniformLocation(program, "contrast");
-  warmthLoc = gl.getUniformLocation(program, "warmth");
-  // grainLoc = gl.getUniformLocation(program, "grain");
-  highlightsLoc = gl.getUniformLocation(program, "highlights");
-  shadowsLoc = gl.getUniformLocation(program, "shadows");
-  fadeAmountLoc = gl.getUniformLocation(program, "fadeAmount");
-  vignetteLoc = gl.getUniformLocation(program, "vignette");
-  saturationLoc = gl.getUniformLocation(program, "saturation");
-
-  gl.uniform1f(contrastLoc, 1);
-  gl.uniform1f(saturationLoc, 1);
-  gl.uniform1f(shadowsLoc, 1);
-  gl.uniform1f(highlightsLoc, 1);
-
-  // Bind VERTICES as the active array buffer.
-  const VERTICES = new Float32Array([-1, -1, -1, 1, 1, 1, -1, -1, 1, 1, 1, -1]);
-
-  const vertexBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, VERTICES, gl.STATIC_DRAW);
-
-  // Set and enable our array buffer as the program's "position" variable
-  const positionLocation = gl.getAttribLocation(program, "position");
-  gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-  gl.enableVertexAttribArray(positionLocation);
-
-  await drawImage(data.bitmap);
-
+  await initImage(data.bitmap);
   draw();
 };
 
@@ -137,52 +396,45 @@ addEventListener("message", async (event: MessageEvent) => {
     init(data);
   } else if (gl) {
     if (isVignetteData(data)) {
-      if (vignetteLoc) {
-        gl.uniform1f(vignetteLoc, data.vignette);
-        draw();
-      }
+      gl.useProgram(toolProgram);
+      gl.uniform1f(toolVignetteLocation, data.vignette);
     }
     if (isWarmthData(data)) {
-      if (warmthLoc) {
-        gl.uniform1f(warmthLoc, data.warmth);
-        draw();
-      }
+      gl.useProgram(toolProgram);
+      gl.uniform1f(toolWarmthLocation, data.warmth);
     }
     if (isGrainData(data)) {
-      if (grainLoc) {
-        gl.uniform1f(grainLoc, data.grain);
-        draw();
-      }
+      gl.useProgram(toolProgram);
+      gl.uniform1f(toolGrainLocation, data.grain);
     }
     if (isHighlightsData(data)) {
-      if (highlightsLoc) {
-        gl.uniform1f(highlightsLoc, data.highlights);
-        draw();
-      }
+      gl.useProgram(toolProgram);
+      gl.uniform1f(toolHighlightsLocation, data.highlights);
     }
     if (isShadowsData(data)) {
-      if (shadowsLoc) {
-        gl.uniform1f(shadowsLoc, data.shadows);
-        draw();
-      }
+      gl.useProgram(toolProgram);
+      gl.uniform1f(toolShadowsLocation, data.shadows);
     }
     if (isFadeData(data)) {
-      if (fadeAmountLoc) {
-        gl.uniform1f(fadeAmountLoc, data.fade);
-        draw();
-      }
+      gl.useProgram(toolProgram);
+      gl.uniform1f(toolFadeLocation, data.fade);
     }
     if (isContrastData(data)) {
-      if (contrastLoc) {
-        gl.uniform1f(contrastLoc, data.contrast);
-        draw();
-      }
+      gl.useProgram(toolProgram);
+      gl.uniform1f(toolContrastLocation, data.contrast);
     }
     if (isSaturationData(data)) {
-      if (saturationLoc) {
-        gl.uniform1f(saturationLoc, data.saturation);
-        draw();
-      }
+      gl.useProgram(toolProgram);
+      gl.uniform1f(toolSaturationLocation, data.saturation);
     }
+    if (isSharpenData(data)) {
+      // gl.uniform1f(sharpenLocation, data.sharpen);
+    }
+    if (isEnhanceData(data)) {
+      gl.useProgram(enhanceProgram);
+      gl.uniform1f(enhanceIntensityLocation, data.enhance);
+    }
+
+    draw();
   }
 });

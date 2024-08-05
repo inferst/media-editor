@@ -8,12 +8,12 @@ uniform lowp float grain;
 uniform lowp float highlights;
 uniform lowp float vignette;
 uniform lowp float shadows;
-uniform lowp float fadeAmount;
+uniform lowp float fade;
 uniform lowp float saturation;
 
-// ???
-// uniform highp float width;
-// uniform highp float height;
+// Grain
+uniform highp float width;
+uniform highp float height;
 
 const mediump vec3 hsLuminanceWeighting = vec3(0.3, 0.3, 0.3);
 const mediump vec3 satLuminanceWeighting = vec3(0.2126, 0.7152, 0.0722);
@@ -48,7 +48,7 @@ highp vec4 rnm(in highp vec2 tc) {
     return vec4(fract(noise), fract(noise * 1.2154), fract(noise * 1.3453), fract(noise * 1.3647)) * 2.0 - 1.0;
 }
 
-highp float fade(in highp float t) {
+highp float getFade(in highp float t) {
     return t * t * t * (t * (t * 6.0 - 15.0) + 10.0);
 }
 
@@ -67,9 +67,9 @@ highp float pnoise3D(in highp vec3 p) {
     perm = rnm(pi.xy + vec2(permTexUnit, permTexUnit)).a;
     highp float n110 = dot(rnm(vec2(perm, pi.z)).rgb * 4.0 - 1.0, pf - vec3(1.0, 1.0, 0.0));
     highp float n111 = dot(rnm(vec2(perm, pi.z + permTexUnit)).rgb * 4.0 - 1.0, pf - vec3(1.0, 1.0, 1.0));
-    highp vec4 n_x = mix(vec4(n000, n001, n010, n011), vec4(n100, n101, n110, n111), fade(pf.x));
-    highp vec2 n_xy = mix(n_x.xy, n_x.zw, fade(pf.y));
-    return mix(n_xy.x, n_xy.y, fade(pf.z));
+    highp vec4 n_x = mix(vec4(n000, n001, n010, n011), vec4(n100, n101, n110, n111), getFade(pf.x));
+    highp vec2 n_xy = mix(n_x.xy, n_x.zw, getFade(pf.y));
+    return mix(n_xy.x, n_xy.y, getFade(pf.z));
 }
 
 lowp vec2 coordRot(in lowp vec2 tc, in lowp float angle) {
@@ -104,8 +104,8 @@ void main() {
     result = vec4(hsresult.rgb, result.a);
     result = vec4(clamp(((result.rgb - vec3(0.5)) * contrast + vec3(0.5)), 0.0, 1.0), result.a);
 
-    if (abs(fadeAmount) > toolEpsilon) {
-        result.rgb = fadeAdjust(result.rgb, fadeAmount);
+    if (abs(fade) > toolEpsilon) {
+        result.rgb = fadeAdjust(result.rgb, fade);
     }
 
     lowp float satLuminance = dot(result.rgb, satLuminanceWeighting);
@@ -126,17 +126,17 @@ void main() {
         result.rgb = yuvToRgb(yuvColor);
     }
 
-    // if (abs(grain) > toolEpsilon) {
-    //     highp vec3 rotOffset = vec3(1.425, 3.892, 5.835);
-    //     highp vec2 rotCoordsR = coordRot(vTextureCoord, rotOffset.x);
-    //     highp vec3 noise = vec3(pnoise3D(vec3(rotCoordsR * vec2(width / grainsize, height / grainsize), 0.0)));
-    //     lowp vec3 lumcoeff = vec3(0.299, 0.587, 0.114);
-    //     lowp float luminance = dot(result.rgb, lumcoeff);
-    //     lowp float lum = smoothstep(0.2, 0.0, luminance);
-    //     lum += luminance;
-    //     noise = mix(noise, vec3(0.0), pow(lum, 4.0));
-    //     result.rgb = result.rgb + noise * grain;
-    // }
+    if (abs(grain) > toolEpsilon) {
+        highp vec3 rotOffset = vec3(1.425, 3.892, 5.835);
+        highp vec2 rotCoordsR = coordRot(vTextureCoord, rotOffset.x);
+        highp vec3 noise = vec3(pnoise3D(vec3(rotCoordsR * vec2(width / grainsize, height / grainsize), 0.0)));
+        lowp vec3 lumcoeff = vec3(0.299, 0.587, 0.114);
+        lowp float luminance = dot(result.rgb, lumcoeff);
+        lowp float lum = smoothstep(0.2, 0.0, luminance);
+        lum += luminance;
+        noise = mix(noise, vec3(0.0), pow(lum, 4.0));
+        result.rgb = result.rgb + noise * grain;
+    }
 
     if (abs(vignette) > toolEpsilon) {
         const lowp float midpoint = 0.7;

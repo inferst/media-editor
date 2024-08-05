@@ -10,6 +10,7 @@ export type EditorState = {
   onShadowsChange: (value: number) => void;
   onSaturationChange: (value: number) => void;
   onFadeChange: (value: number) => void;
+  onEnhanceChange: (value: number) => void;
 };
 
 export type EditorContextValue = {

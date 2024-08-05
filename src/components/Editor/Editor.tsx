@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSignal, onMount, Show } from "solid-js";
+import { MessageData } from "../../types/types";
 import EditorWorker from "../../workers/editorWorker?worker";
 import { Sidebar } from "../Sidebar/Sidebar";
+import BrowseFile from "./BrowseFile";
 import styles from "./Editor.module.css";
 import { EditorContext, EditorContextValue } from "./editorContext";
-import { MessageData } from "../../types/types";
-import BrowseFile from "./BrowseFile";
 
 const editorWorker = new EditorWorker();
 
@@ -42,7 +42,7 @@ export function Editor() {
 
   const onContrastChange = (value: number) => {
     postMessage({
-      contrast: (value + 100) / 100,
+      contrast: (value + 150) / 200,
     });
   };
 
@@ -66,7 +66,7 @@ export function Editor() {
 
   const onGrainChange = (value: number) => {
     postMessage({
-      grain: value / 100,
+      grain: value / 200,
     });
   };
 
@@ -88,6 +88,12 @@ export function Editor() {
     });
   };
 
+  const onEnhanceChange = (value: number) => {
+    postMessage({
+      enhance: (value - 100) / 100,
+    });
+  };
+
   const context: EditorContextValue = {
     state: {
       onBrightnessChange,
@@ -98,7 +104,8 @@ export function Editor() {
       onGrainChange,
       onWarmthChange,
       onHighlightsChange,
-      onSaturationChange
+      onSaturationChange,
+      onEnhanceChange,
     },
   };
 

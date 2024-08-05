@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
-import Adjust from "../../ui/Adjust/Adjust";
 import { useEditorContext } from "../../Editor/editorContext";
+import Adjust from "../../ui/Adjust/Adjust";
 
 const Enhance = () => {
   const [enhance, setEnhance] = createSignal(50);
@@ -57,12 +57,22 @@ const Enhance = () => {
     setShadows(value);
   };
 
+  const handleGrainChange = (value: number) => {
+    context.state.onGrainChange(value);
+    setGrain(value);
+  };
+
+  const handleEnhanceChange = (value: number) => {
+    context.state.onEnhanceChange(value);
+    setEnhance(value);
+  };
+
   const color = "#4E8EE5";
 
   return (
     <>
       <Adjust
-        onChange={setEnhance}
+        onChange={handleEnhanceChange}
         value={enhance()}
         min={0}
         max={100}
@@ -152,7 +162,7 @@ const Enhance = () => {
         variant="highlight"
       />
       <Adjust
-        onChange={setGrain}
+        onChange={handleGrainChange}
         value={grain()}
         min={0}
         max={100}

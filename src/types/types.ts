@@ -11,7 +11,9 @@ export type MessageData =
   | HighlightsData
   | ShadowsData
   | FadeData
-  | SaturationData;
+  | SaturationData
+  | SharpenData
+  | EnhanceData;
 
 export const isOffscreenData = (data: MessageData): data is OffscreenData => {
   return "canvas" in data && "bitmap" in data;
@@ -84,4 +86,20 @@ export const isSaturationData = (data: MessageData): data is SaturationData => {
 
 export type SaturationData = {
   saturation: number;
+};
+
+export const isSharpenData = (data: MessageData): data is SharpenData => {
+  return "sharpen" in data;
+};
+
+export type SharpenData = {
+  sharpen: number;
+};
+
+export const isEnhanceData = (data: MessageData): data is EnhanceData => {
+  return "enhance" in data;
+};
+
+export type EnhanceData = {
+  enhance: number;
 };
