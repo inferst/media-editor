@@ -6,13 +6,13 @@ import TextSVG from "@assets/icons/text.svg";
 import clsx from "clsx";
 import { createMemo, createSignal, For, JSX, ValidComponent } from "solid-js";
 import { Dynamic } from "solid-js/web";
+import Brush from "../content/Brush/Brush";
 import Crop from "../content/Crop/Crop";
 import Enhance from "../content/Enhance/Enhance";
+import Smile from "../content/Smile/Smile";
 import Text from "../content/Text/Text";
 import Tab, { TabItemType } from "./Tab";
 import styles from "./Tabs.module.css";
-import Brush from "../content/Brush/Brush";
-import Smile from "../content/Smile/Smile";
 
 export type TabItem = {
   type: TabItemType;
@@ -59,16 +59,6 @@ export function Tabs() {
   const currentTab = createMemo(() => {
     return tabs.find((tab) => tab.type == currentTabType());
   });
-
-  // const index = createMemo(() => {
-  //   const tab = tabs.find((tab) => tab.type == currentTab());
-  //
-  //   if (tab) {
-  //     return tabs.indexOf(tab);
-  //   }
-  //
-  //   return 0;
-  // });
 
   const handleClick = (type: TabItemType) => {
     setCurrentTabType(type);

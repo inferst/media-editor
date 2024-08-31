@@ -21,8 +21,8 @@ const SaturationPicker: Component<SaturationPickerProps> = (props) => {
     return {
       x: props.hsv.s / 100,
       y: (100 - props.hsv.v) / 100,
-    }
-  })
+    };
+  });
 
   return (
     <div ref={move.setRef} class={styles.picker}>
@@ -51,8 +51,8 @@ const SaturationPicker: Component<SaturationPickerProps> = (props) => {
         class={styles.thumb}
         style={{
           "background-color": `${color()}`,
-          "left": `${Math.round(position().x * 100)}%`,
-          "top": `${Math.round(position().y * 100)}%`,
+          left: `${Math.round(position().x * 100)}%`,
+          top: `${Math.round(position().y * 100)}%`,
         }}
       />
     </div>

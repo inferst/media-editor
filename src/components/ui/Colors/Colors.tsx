@@ -1,7 +1,4 @@
 import { Component, createMemo, createSignal, For, Show } from "solid-js";
-import styles from "./Colors.module.css";
-import SaturationPicker from "./SaturationPicker/SaturationPicker";
-import HueSlider from "./HueSlider/HueSlider";
 import {
   hexToHsv,
   hsvEquals,
@@ -13,6 +10,9 @@ import {
 } from "../../../utils/color";
 import TextInput from "../TextInput/TextInput";
 import ColorButton from "./ColorButton/ColorButton";
+import styles from "./Colors.module.css";
+import HueSlider from "./HueSlider/HueSlider";
+import SaturationPicker from "./SaturationPicker/SaturationPicker";
 
 type ColorsProps = {
   colors: string[];

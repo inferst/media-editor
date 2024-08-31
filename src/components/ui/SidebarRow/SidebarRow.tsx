@@ -1,6 +1,6 @@
+import clsx from "clsx";
 import { ParentComponent } from "solid-js";
 import styles from "./SidebarRow.module.css";
-import clsx from "clsx";
 
 export type SidebarRowProps = {
   isColumn?: boolean;

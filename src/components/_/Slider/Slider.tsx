@@ -1,6 +1,6 @@
+import clsx from "clsx";
 import { Component, createMemo, mergeProps } from "solid-js";
 import styles from "./Slider.module.css";
-import clsx from "clsx";
 
 export type SliderVariant = "default" | "active";
 

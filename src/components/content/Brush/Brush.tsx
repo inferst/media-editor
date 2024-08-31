@@ -6,8 +6,8 @@ import { createSignal } from "solid-js";
 import Adjust from "../../ui/Adjust/Adjust";
 import Colors from "../../ui/Colors/Colors";
 import Label from "../../ui/Label/Label";
-import styles from "./Brush.module.css";
 import ToolButton from "../../ui/ToolButton/ToolButton";
+import styles from "./Brush.module.css";
 
 type Tool = "pen" | "arrow" | "brush" | "neon" | "blur" | "eraser";
 

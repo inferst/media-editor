@@ -1,4 +1,3 @@
-
 import {
   isContrastData,
   isFadeData,
@@ -216,7 +215,6 @@ const init = async (data: OffscreenData) => {
   }
 
   gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-
 
   initToolShaders();
   // initSharpenShaders(program);

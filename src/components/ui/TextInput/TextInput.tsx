@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
-import styles from "./TextInput.module.css";
 import { JSX } from "solid-js/h/jsx-runtime";
+import styles from "./TextInput.module.css";
 
 export type TextInputProps = {
   placeholder: string;

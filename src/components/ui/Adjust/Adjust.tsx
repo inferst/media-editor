@@ -1,8 +1,8 @@
-import { Component, createMemo, JSX } from "solid-js";
-import styles from "./Adjust.module.css";
 import clsx from "clsx";
+import { Component, createMemo, JSX } from "solid-js";
 import Label from "../Label/Label";
 import Slider from "../Slider/Slider";
+import styles from "./Adjust.module.css";
 
 type AdjustVariant = "default" | "highlight";
 

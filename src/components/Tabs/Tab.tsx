@@ -1,5 +1,5 @@
-import { JSX, ParentComponent } from "solid-js";
 import clsx from "clsx";
+import { JSX, ParentComponent } from "solid-js";
 import styles from "./Tabs.module.css";
 
 export type TabItemType = "enhance" | "crop" | "text" | "brush" | "smile";

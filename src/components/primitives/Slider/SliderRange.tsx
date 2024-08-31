@@ -8,13 +8,13 @@ export type SliderRangeProps = {
 };
 
 const SliderRange: ParentComponent<SliderRangeProps> = (props) => {
-  const context = useSliderContext('SliderRange');
+  const context = useSliderContext("SliderRange");
 
   return (
     <div
       class={props.class}
       style={{
-        position: 'absolute',
+        position: "absolute",
         left: `${context.state.start()}%`,
         width: `${context.state.end()}%`,
         ...props.style,
