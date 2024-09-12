@@ -9,18 +9,23 @@ import SidebarRow from "../../ui/SidebarRow/SidebarRow";
 import { Alignment } from "./Alignment/Alignment";
 import { Style } from "./Style/Style";
 import styles from "./Text.module.css";
+import { getDefaultTextOptions } from "./textOptions";
 
 type TextFont = {
   style: string;
   font: string;
 };
 
+const defaultOptions = getDefaultTextOptions();
+
 const Text = () => {
-  const [color, setColor] = createSignal("#FFFFFF");
-  const [alignment, setAlignment] = createSignal<TextAlignment>("left");
-  const [style, setStyle] = createSignal<TextStyle>("noframe");
-  const [size, setSize] = createSignal(24);
-  const [font, setFont] = createSignal("Roboto");
+  const [color, setColor] = createSignal(defaultOptions.color);
+  const [alignment, setAlignment] = createSignal<TextAlignment>(
+    defaultOptions.alignment,
+  );
+  const [style, setStyle] = createSignal<TextStyle>(defaultOptions.style);
+  const [size, setSize] = createSignal(defaultOptions.size);
+  const [font, setFont] = createSignal(defaultOptions.font);
 
   const context = useEditorContext("Text");
 
@@ -71,7 +76,7 @@ const Text = () => {
   ];
 
   const setTextOptions = () => {
-    context.state.onTextOptionsChange({
+    context.onTextOptionsChange({
       alignment: alignment(),
       font: font(),
       size: size(),

@@ -11,6 +11,7 @@ import Crop from "../content/Crop/Crop";
 import Enhance from "../content/Enhance/Enhance";
 import Smile from "../content/Smile/Smile";
 import Text from "../content/Text/Text";
+import { useEditorContext } from "../Editor/editorContext";
 import Tab, { TabItemType } from "./Tab";
 import styles from "./Tabs.module.css";
 
@@ -27,6 +28,8 @@ export type TabsProps = {
 export function Tabs() {
   const [currentTabType, setCurrentTabType] =
     createSignal<TabItemType>("enhance");
+
+  const context = useEditorContext("Tabs");
 
   const tabs: TabItem[] = [
     {
@@ -62,6 +65,7 @@ export function Tabs() {
 
   const handleClick = (type: TabItemType) => {
     setCurrentTabType(type);
+    context.onEditorTypeChange(type);
   };
 
   return (

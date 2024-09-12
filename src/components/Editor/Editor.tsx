@@ -1,4 +1,5 @@
-import { createSignal, onMount, Show } from "solid-js";
+import { createSignal, Match, onMount, Show, Switch } from "solid-js";
+import { EditorType } from "../../types/editor";
 import { TextOptions } from "../../types/text";
 import { MessageData } from "../../types/types";
 import EditorWorker from "../../workers/editorWorker?worker";
@@ -7,6 +8,7 @@ import BrowseFile from "./BrowseFile";
 import styles from "./Editor.module.css";
 import { EditorContext, EditorContextValue } from "./editorContext";
 import { TextEditor } from "./TextEditor/TextEditor";
+import { getDefaultTextOptions } from "../content/Text/textOptions";
 
 const editorWorker = new EditorWorker();
 
@@ -16,6 +18,10 @@ const postMessage = (data: MessageData, transfer?: Transferable[]) => {
 
 export function Editor() {
   const [isLoaded, setIsLoaded] = createSignal(false);
+  const [editorType, setEditorType] = createSignal<EditorType>("enhance");
+  const [textOptions, setTextOptions] = createSignal<TextOptions>(
+    getDefaultTextOptions(),
+  );
 
   let canvasRef: HTMLCanvasElement | undefined;
   let containerRef: HTMLDivElement | undefined;
@@ -94,23 +100,30 @@ export function Editor() {
   };
 
   const onTextOptionsChange = (options: TextOptions) => {
-    console.log(options);
+    setTextOptions(options);
+  };
+
+  const onEditorTypeChange = (type: EditorType) => {
+    setEditorType(type);
   };
 
   const context: EditorContextValue = {
     state: {
-      onBrightnessChange,
-      onContrastChange,
-      onVignetteChange,
-      onShadowsChange,
-      onFadeChange,
-      onGrainChange,
-      onWarmthChange,
-      onHighlightsChange,
-      onSaturationChange,
-      onEnhanceChange,
-      onTextOptionsChange,
+      editorType,
+      textOptions,
     },
+    onBrightnessChange,
+    onContrastChange,
+    onVignetteChange,
+    onShadowsChange,
+    onFadeChange,
+    onGrainChange,
+    onWarmthChange,
+    onHighlightsChange,
+    onSaturationChange,
+    onEnhanceChange,
+    onTextOptionsChange,
+    onEditorTypeChange,
   };
 
   const handleLoad = (bitmap: ImageBitmap) => {
@@ -130,7 +143,11 @@ export function Editor() {
         <div ref={containerRef} class={styles.container}>
           <Show when={isLoaded()} fallback={<BrowseFile onLoad={handleLoad} />}>
             <canvas ref={canvasRef} class={styles.canvas} />
-            <TextEditor />
+            <Switch>
+              <Match when={editorType() === "text"}>
+                <TextEditor />
+              </Match>
+            </Switch>
           </Show>
         </div>
         <Sidebar />

@@ -1,8 +1,9 @@
 import clsx from "clsx";
 import { JSX, ParentComponent } from "solid-js";
+import { EditorType } from "../../types/editor";
 import styles from "./Tabs.module.css";
 
-export type TabItemType = "enhance" | "crop" | "text" | "brush" | "smile";
+export type TabItemType = EditorType;
 
 export type TabProps = {
   type: TabItemType;
