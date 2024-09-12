@@ -1,11 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSignal, onMount, Show } from "solid-js";
+import { TextOptions } from "../../types/text";
 import { MessageData } from "../../types/types";
 import EditorWorker from "../../workers/editorWorker?worker";
 import { Sidebar } from "../Sidebar/Sidebar";
 import BrowseFile from "./BrowseFile";
 import styles from "./Editor.module.css";
 import { EditorContext, EditorContextValue } from "./editorContext";
+import { TextEditor } from "./TextEditor/TextEditor";
 
 const editorWorker = new EditorWorker();
 
@@ -17,6 +18,7 @@ export function Editor() {
   const [isLoaded, setIsLoaded] = createSignal(false);
 
   let canvasRef: HTMLCanvasElement | undefined;
+  let containerRef: HTMLDivElement | undefined;
   let offscreen: OffscreenCanvas | undefined;
 
   onMount(() => {
@@ -34,10 +36,7 @@ export function Editor() {
   });
 
   const onBrightnessChange = (value: number) => {
-    // editorWorker.postMessage({
-    //   event: "brightness",
-    //   value: value,
-    // });
+    console.log(value);
   };
 
   const onContrastChange = (value: number) => {
@@ -94,6 +93,10 @@ export function Editor() {
     });
   };
 
+  const onTextOptionsChange = (options: TextOptions) => {
+    console.log(options);
+  };
+
   const context: EditorContextValue = {
     state: {
       onBrightnessChange,
@@ -106,6 +109,7 @@ export function Editor() {
       onHighlightsChange,
       onSaturationChange,
       onEnhanceChange,
+      onTextOptionsChange,
     },
   };
 
@@ -123,9 +127,10 @@ export function Editor() {
   return (
     <EditorContext.Provider value={context}>
       <div class={styles.editor}>
-        <div class={styles.wrapper}>
+        <div ref={containerRef} class={styles.container}>
           <Show when={isLoaded()} fallback={<BrowseFile onLoad={handleLoad} />}>
-            <canvas ref={canvasRef} />
+            <canvas ref={canvasRef} class={styles.canvas} />
+            <TextEditor />
           </Show>
         </div>
         <Sidebar />

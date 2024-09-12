@@ -1,4 +1,5 @@
 import { createContext, useContext } from "solid-js";
+import { TextOptions } from "../../types/text";
 
 export type EditorState = {
   onBrightnessChange: (value: number) => void;
@@ -11,6 +12,7 @@ export type EditorState = {
   onSaturationChange: (value: number) => void;
   onFadeChange: (value: number) => void;
   onEnhanceChange: (value: number) => void;
+  onTextOptionsChange: (options: TextOptions) => void;
 };
 
 export type EditorContextValue = {

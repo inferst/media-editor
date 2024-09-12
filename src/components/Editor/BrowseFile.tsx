@@ -15,7 +15,13 @@ const BrowseFile: Component<BrowseFileProps> = (props: BrowseFileProps) => {
   };
 
   return (
-    <input ref={ref} onChange={handleChange} type="file" multiple={false} />
+    <input
+      ref={ref}
+      onChange={handleChange}
+      type="file"
+      multiple={false}
+      style={{ display: "block" }}
+    />
   );
 };
 

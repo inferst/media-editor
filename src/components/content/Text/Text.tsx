@@ -1,15 +1,13 @@
-import CenterSVG from "@assets/icons/align_centre.svg";
-import LeftSVG from "@assets/icons/align_left.svg";
-import RightSVG from "@assets/icons/align_right.svg";
-import BlackSVG from "@assets/icons/black.svg";
-import NoFrameSVG from "@assets/icons/no_frame.svg";
-import WhiteSVG from "@assets/icons/white.svg";
 import { createSignal, For } from "solid-js";
+import { TextAlignment, TextStyle } from "../../../types/text";
+import { useEditorContext } from "../../Editor/editorContext";
 import Adjust from "../../ui/Adjust/Adjust";
 import Colors from "../../ui/Colors/Colors";
 import Label from "../../ui/Label/Label";
 import SidebarButton from "../../ui/SidebarButton/SidebarButton";
 import SidebarRow from "../../ui/SidebarRow/SidebarRow";
+import { Alignment } from "./Alignment/Alignment";
+import { Style } from "./Style/Style";
 import styles from "./Text.module.css";
 
 type TextFont = {
@@ -19,8 +17,12 @@ type TextFont = {
 
 const Text = () => {
   const [color, setColor] = createSignal("#FFFFFF");
+  const [alignment, setAlignment] = createSignal<TextAlignment>("left");
+  const [style, setStyle] = createSignal<TextStyle>("noframe");
   const [size, setSize] = createSignal(24);
   const [font, setFont] = createSignal("Roboto");
+
+  const context = useEditorContext("Text");
 
   const fonts: TextFont[] = [
     {
@@ -68,19 +70,48 @@ const Text = () => {
     "#BD5CF3",
   ];
 
+  const setTextOptions = () => {
+    context.state.onTextOptionsChange({
+      alignment: alignment(),
+      font: font(),
+      size: size(),
+      color: color(),
+      style: style(),
+    });
+  };
+
+  const handleAlignmentClick = (item: TextAlignment) => {
+    setAlignment(item);
+    setTextOptions();
+  };
+
+  const handleStyleClick = (item: TextStyle) => {
+    setStyle(item);
+    setTextOptions();
+  };
+
+  const handleSizeChange = (value: number) => {
+    setSize(value);
+    setTextOptions();
+  };
+
+  const handleFontChange = (value: string) => {
+    setFont(value);
+    setTextOptions();
+  };
+
   return (
     <>
       <Colors colors={colors} onChange={setColor} />
       <div class={styles["text-row"]}>
         <SidebarRow isColumn={true}>
-          <SidebarButton icon={<LeftSVG />} isActive={true} />
-          <SidebarButton icon={<CenterSVG />} />
-          <SidebarButton icon={<RightSVG />} />
+          <Alignment
+            value={alignment()}
+            onClick={(value) => handleAlignmentClick(value)}
+          />
         </SidebarRow>
         <SidebarRow isColumn={true}>
-          <SidebarButton icon={<NoFrameSVG />} isActive={true} />
-          <SidebarButton icon={<BlackSVG />} />
-          <SidebarButton icon={<WhiteSVG />} />
+          <Style value={style()} onClick={(value) => handleStyleClick(value)} />
         </SidebarRow>
       </div>
       <Adjust
@@ -89,7 +120,7 @@ const Text = () => {
         max={48}
         default={0}
         value={size()}
-        onChange={setSize}
+        onChange={handleSizeChange}
         color={color()}
       />
       <Label class={styles.label}>Font</Label>
@@ -97,7 +128,7 @@ const Text = () => {
         <For each={fonts}>
           {(item) => (
             <SidebarButton
-              onClick={() => setFont(item.font)}
+              onClick={() => handleFontChange(item.font)}
               isActive={font() == item.font}
               class={item.style}
             >
