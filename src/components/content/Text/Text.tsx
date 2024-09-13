@@ -105,9 +105,14 @@ const Text = () => {
     setTextOptions();
   };
 
+  const handleColorChange = (value: string) => {
+    setColor(value);
+    setTextOptions();
+  };
+
   return (
     <>
-      <Colors colors={colors} onChange={setColor} />
+      <Colors colors={colors} onChange={handleColorChange} />
       <div class={styles["text-row"]}>
         <SidebarRow isColumn={true}>
           <Alignment
