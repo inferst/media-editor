@@ -5,9 +5,11 @@ import { ContentEditable } from "./ContentEditable";
 import styles from "./TextElement.module.css";
 
 export type TextElementProps = {
+  isSelected: boolean;
   options: TextOptions;
   position: Point;
-  onFocus: () => void;
+  onMouseDown: () => void;
+  onBlur: (isEmpty: boolean) => void;
 };
 
 export const TextElement: Component<TextElementProps> = (props) => {
@@ -21,7 +23,11 @@ export const TextElement: Component<TextElementProps> = (props) => {
         "font-size": `${props.options.size}px`,
       }}
     >
-      <ContentEditable onFocus={() => props.onFocus()} />
+      <ContentEditable
+        isSelected={props.isSelected}
+        onBlur={props.onBlur}
+        onMouseDown={props.onMouseDown}
+      />
     </div>
   );
 };

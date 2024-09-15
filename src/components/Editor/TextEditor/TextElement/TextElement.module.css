@@ -1,4 +1,5 @@
 .element {
   position: absolute;
-  min-width: 20px;
+  border: none;
+  outline: none;
 }

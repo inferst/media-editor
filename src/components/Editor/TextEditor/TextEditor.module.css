@@ -2,4 +2,8 @@
   position: absolute;
   width: 800px;
   height: 600px;
+
+  &.editable {
+    cursor: text;
+  }
 }

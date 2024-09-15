@@ -1,0 +1,19 @@
+.contenteditable {
+  min-width: 20px;
+  border: none;
+  outline: none;
+  cursor: default;
+
+  &:hover {
+    cursor: default;
+  }
+
+  &.edit {
+    cursor: text;
+  }
+}
+
+.selected {
+  border: 1px dashed #fff;
+  margin: -1px;
+}
