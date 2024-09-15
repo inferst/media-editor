@@ -8,7 +8,7 @@ import styles from "./TextEditor.module.css";
 import { TextElement } from "./TextElement/TextElement";
 
 type TextElement = {
-  id: number;
+  id: string;
   position: Point;
   options: TextOptions;
 };
@@ -16,7 +16,7 @@ type TextElement = {
 export const TextEditor = () => {
   const [elements, setElements] = createSignal<TextElement[]>([]);
   const [selectedElementId, setSelectedElementId] = createSignal<
-    number | undefined
+    string | undefined
   >();
 
   const isEditable = createMemo(() => selectedElementId() == undefined);
@@ -27,7 +27,7 @@ export const TextEditor = () => {
     if (isEditable()) {
       event.preventDefault();
 
-      const id = elements().length;
+      const id = crypto.randomUUID();
 
       setElements([
         ...elements(),
@@ -62,11 +62,11 @@ export const TextEditor = () => {
     }),
   );
 
-  const handleElementMouseDown = (id: number) => {
+  const handleElementMouseDown = (id: string) => {
     setSelectedElementId(id);
   };
 
-  const handleElementBlur = (id: number, isEmpty: boolean) => {
+  const handleElementBlur = (id: string, isEmpty: boolean) => {
     if (isEmpty) {
       setElements(
         elements().filter((element) => {
