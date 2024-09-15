@@ -1,5 +1,7 @@
 import clsx from "clsx";
-import { Component, createSignal, onCleanup, onMount } from "solid-js";
+import { Component, createSignal, onMount } from "solid-js";
+import { createClickOutside } from "../../../../hooks/createOusideClick";
+import { stripHtmlTags } from "../../../../utils/html";
 import styles from "./ContentEditable.module.css";
 
 export type ContentEditableProps = {
@@ -8,25 +10,13 @@ export type ContentEditableProps = {
   onBlur: (isEmpty: boolean) => void;
 };
 
-function stripHtmlTags(html: string) {
-  try {
-    const stripped = new DOMParser().parseFromString(html, "text/html");
-    return stripped.body.textContent || "";
-  } catch (error) {
-    console.error("Error parsing HTML string:", error);
-    return "";
-  }
-}
-
 export const ContentEditable: Component<ContentEditableProps> = (props) => {
   const [isEditable, setIsEditable] = createSignal(true);
 
   let divRef: HTMLDivElement | undefined;
 
-  const documentMouseDown = (event: MouseEvent) => {
-    const target = event.target as HTMLElement;
-
-    if (divRef && target != divRef) {
+  const { setRef } = createClickOutside(() => {
+    if (divRef) {
       if (props.isSelected) {
         props.onBlur(stripHtmlTags(divRef.innerHTML) == "");
       }
@@ -34,15 +24,10 @@ export const ContentEditable: Component<ContentEditableProps> = (props) => {
       setIsEditable(false);
       divRef.blur();
     }
-  };
+  });
 
   onMount(() => {
     divRef?.focus();
-    document.addEventListener("mousedown", documentMouseDown);
-  });
-
-  onCleanup(() => {
-    document.removeEventListener("mousedown", documentMouseDown);
   });
 
   const handleMouseDown = (event: MouseEvent) => {
@@ -58,7 +43,10 @@ export const ContentEditable: Component<ContentEditableProps> = (props) => {
 
   return (
     <div
-      ref={divRef}
+      ref={(ref) => {
+        divRef = ref;
+        setRef(ref);
+      }}
       onMouseDown={handleMouseDown}
       spellcheck={false}
       contenteditable={true}
