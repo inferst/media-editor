@@ -26,7 +26,7 @@ export type EditorContextValue = {
   onFadeChange: (value: number) => void;
   onEnhanceChange: (value: number) => void;
 
-  onTextOptionsChange: (options: TextOptions) => void;
+  setTextOptions: (options: TextOptions) => void;
 };
 
 export const EditorContext = createContext<EditorContextValue>();

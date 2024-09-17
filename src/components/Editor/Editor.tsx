@@ -102,10 +102,6 @@ export function Editor() {
     });
   };
 
-  const onTextOptionsChange = (options: TextOptions) => {
-    setTextOptions(options);
-  };
-
   const onEditorTypeChange = (type: EditorType) => {
     setEditorType(type);
   };
@@ -130,8 +126,9 @@ export function Editor() {
     onHighlightsChange,
     onSaturationChange,
     onEnhanceChange,
-    onTextOptionsChange,
     onEditorTypeChange,
+
+    setTextOptions,
     setTextOptionsRef,
   };
 

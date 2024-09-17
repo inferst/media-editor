@@ -15,17 +15,12 @@ import HueSlider from "./HueSlider/HueSlider";
 import SaturationPicker from "./SaturationPicker/SaturationPicker";
 
 type ColorsProps = {
+  color: HsvObject;
   colors: string[];
-  onChange: (color: string) => void;
+  onChange: (hsv: HsvObject) => void;
 };
 
 const Colors: Component<ColorsProps> = (props) => {
-  const [color, setColor] = createSignal<HsvObject>({
-    h: 0,
-    s: 0,
-    v: 100,
-  });
-
   const [isColorPicker, setIsColorPicker] = createSignal(false);
   const [sliderHue, setSliderHue] = createSignal(0);
 
@@ -36,26 +31,25 @@ const Colors: Component<ColorsProps> = (props) => {
   });
 
   const isActive = (hsv: HsvObject) => {
-    return hsvEquals(hsv, color()) && !isColorPicker();
+    return hsvEquals(hsv, props.color) && !isColorPicker();
   };
 
   const hex = createMemo(() => {
-    return hsvToHex(color()).toUpperCase();
+    return hsvToHex(props.color).toUpperCase();
   });
 
   const rgb = createMemo(() => {
-    const hsv = color();
+    const hsv = props.color;
     const rgb = hsvToRgb(hsv);
     return `${rgb.r},${rgb.g},${rgb.b}`;
   });
 
   const updateColor = (hsv: HsvObject) => {
-    setColor(hsv);
-    props.onChange(hsvToHex(hsv));
+    props.onChange(hsv);
   };
 
   const handleHueChange = (hue: number) => {
-    const hsv = { ...color(), h: hue };
+    const hsv = { ...props.color, h: hue };
     updateColor(hsv);
   };
 
@@ -73,7 +67,7 @@ const Colors: Component<ColorsProps> = (props) => {
   };
 
   const handleSaturationChange = (s: number, v: number) => {
-    const hsv = { ...color(), s, v };
+    const hsv = { ...props.color, s, v };
     updateColor(hsv);
   };
 
@@ -103,13 +97,16 @@ const Colors: Component<ColorsProps> = (props) => {
           isActive={isColorPicker()}
           onClick={() => {
             setIsColorPicker(!isColorPicker());
-            setSliderHue(color().h);
+            setSliderHue(props.color.h);
           }}
         />
       </div>
       <Show when={isColorPicker()}>
         <div class={styles.picker}>
-          <SaturationPicker hsv={color()} onChange={handleSaturationChange} />
+          <SaturationPicker
+            hsv={props.color}
+            onChange={handleSaturationChange}
+          />
           <div class={styles.input}>
             <TextInput
               placeholder="HEX"

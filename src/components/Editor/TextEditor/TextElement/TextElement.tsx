@@ -8,11 +8,15 @@ export type TextElementProps = {
   isSelected: boolean;
   options: TextOptions;
   position: Point;
-  onMouseDown: () => void;
+  onMouseDown: (options: TextOptions) => void;
   onBlur: (isEmpty: boolean) => void;
 };
 
 export const TextElement: Component<TextElementProps> = (props) => {
+  const handleMouseDown = () => {
+    props.onMouseDown(props.options);
+  };
+
   return (
     <div
       class={styles.element}
@@ -26,7 +30,7 @@ export const TextElement: Component<TextElementProps> = (props) => {
       <ContentEditable
         isSelected={props.isSelected}
         onBlur={props.onBlur}
-        onMouseDown={props.onMouseDown}
+        onMouseDown={handleMouseDown}
       />
     </div>
   );

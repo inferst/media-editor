@@ -62,8 +62,9 @@ export const TextEditor = () => {
     }),
   );
 
-  const handleElementMouseDown = (id: string) => {
+  const handleElementMouseDown = (id: string, options: TextOptions) => {
     setSelectedElementId(id);
+    context.setTextOptions(options);
   };
 
   const handleElementBlur = (id: string, isEmpty: boolean) => {
@@ -85,14 +86,13 @@ export const TextEditor = () => {
         [styles.editable]: isEditable(),
       })}
     >
-      <div>{selectedElementId()}</div>
       <Key each={elements()} by={(item) => item.id}>
         {(item) => (
           <TextElement
             isSelected={selectedElementId() == item().id}
             options={item().options}
             position={item().position}
-            onMouseDown={() => handleElementMouseDown(item().id)}
+            onMouseDown={(options) => handleElementMouseDown(item().id, options)}
             onBlur={(isEmpty) => handleElementBlur(item().id, isEmpty)}
           />
         )}
