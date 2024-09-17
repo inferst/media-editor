@@ -1,4 +1,4 @@
-import { createSignal, For } from "solid-js";
+import { createSignal, For, onMount } from "solid-js";
 import { TextAlignment, TextStyle } from "../../../types/text";
 import { useEditorContext } from "../../Editor/editorContext";
 import Adjust from "../../ui/Adjust/Adjust";
@@ -19,6 +19,7 @@ type TextFont = {
 const defaultOptions = getDefaultTextOptions();
 
 const Text = () => {
+  const [ref, setRef] = createSignal<HTMLElement | undefined>();
   const [color, setColor] = createSignal(defaultOptions.color);
   const [alignment, setAlignment] = createSignal<TextAlignment>(
     defaultOptions.alignment,
@@ -110,8 +111,15 @@ const Text = () => {
     setTextOptions();
   };
 
+  onMount(() => {
+    const element = ref();
+    if (element) {
+      context.setTextOptionsRef(element);
+    }
+  });
+
   return (
-    <>
+    <div ref={setRef}>
       <Colors colors={colors} onChange={handleColorChange} />
       <div class={styles["text-row"]}>
         <SidebarRow isColumn={true}>
@@ -147,7 +155,7 @@ const Text = () => {
           )}
         </For>
       </SidebarRow>
-    </>
+    </div>
   );
 };
 

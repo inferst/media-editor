@@ -5,10 +5,13 @@ import { TextOptions } from "../../types/text";
 export type EditorState = {
   editorType: Accessor<EditorType>;
   textOptions: Accessor<TextOptions>;
+  textOptionsRef: Accessor<HTMLElement | undefined>;
 };
 
 export type EditorContextValue = {
   state: EditorState;
+
+  setTextOptionsRef: (ref: HTMLElement) => void;
 
   onEditorTypeChange: (type: EditorType) => void;
 
