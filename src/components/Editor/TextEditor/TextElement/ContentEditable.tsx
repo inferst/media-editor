@@ -1,67 +1,35 @@
 import clsx from "clsx";
-import { Component, createSignal, onMount } from "solid-js";
-import { createClickOutside } from "../../../../hooks/createOusideClick";
-import { stripHtmlTags } from "../../../../utils/html";
+import { Component, onMount } from "solid-js";
 import styles from "./ContentEditable.module.css";
-import { useEditorContext } from "../../editorContext";
+import { TextStyle } from "../../../../types/text";
 
 export type ContentEditableProps = {
-  isSelected: boolean;
-  onMouseDown: () => void;
-  onBlur: (isEmpty: boolean) => void;
+  isEditable: boolean;
+  style: TextStyle,
+  color: string,
 };
 
 export const ContentEditable: Component<ContentEditableProps> = (props) => {
-  const [isEditable, setIsEditable] = createSignal(true);
-
-  const context = useEditorContext("ContentEditable");
-
   let divRef: HTMLDivElement | undefined;
-
-  const { setRef } = createClickOutside((event) => {
-    const target = event.target as HTMLElement;
-    console.log(target);
-
-    if (divRef && target && !context.state.textOptionsRef()?.contains(target)) {
-      if (props.isSelected) {
-        props.onBlur(stripHtmlTags(divRef.innerHTML) == "");
-      }
-
-      setIsEditable(false);
-      divRef.blur();
-    }
-  });
 
   onMount(() => {
     divRef?.focus();
   });
 
-  const handleMouseDown = (event: MouseEvent) => {
-    if (!props.isSelected) {
-      event.preventDefault();
-    } else {
-      setIsEditable(true);
-    }
-
-    event.stopPropagation();
-    props.onMouseDown();
-  };
-
   return (
-    <div
-      ref={(ref) => {
-        divRef = ref;
-        setRef(ref);
-      }}
-      onMouseDown={handleMouseDown}
+    <span
+      ref={divRef}
       spellcheck={false}
       contenteditable={true}
       class={clsx(styles.contenteditable, {
-        [styles.selected]: props.isSelected,
-        [styles.edit]: isEditable(),
+        [styles.edit]: props.isEditable,
       })}
-    >
-      {" "}
-    </div>
+      style={{
+        color: props.style == 'white' ? 'white' : props.color,
+        "background-color": props.style == 'white' ? props.color : undefined,
+        "-webkit-text-stroke-width": props.style == 'black' ? '1px' : undefined,
+        "-webkit-text-stroke-color": "black",
+      }}
+    />
   );
 };
