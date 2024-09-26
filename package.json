@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@solid-primitives/keyed": "^1.2.2",
+    "@types/node": "^22.7.0",
     "clsx": "^2.1.1",
     "solid-js": "^1.8.17"
   },

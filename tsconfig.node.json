@@ -7,7 +7,12 @@
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
     "strict": true,
-    "noEmit": true
+    "noEmit": true,
+    "lib": [
+      "DOM"
+    ]
   },
-  "include": ["vite.config.js"]
+  "include": [
+    "vite.config.js"
+  ]
 }
