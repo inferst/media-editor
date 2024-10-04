@@ -1,6 +1,6 @@
-import CenterSVG from "@assets/icons/align_centre.svg";
-import LeftSVG from "@assets/icons/align_left.svg";
-import RightSVG from "@assets/icons/align_right.svg";
+import CenterSVG from "@/assets/icons/align_centre.svg";
+import LeftSVG from "@/assets/icons/align_left.svg";
+import RightSVG from "@/assets/icons/align_right.svg";
 import { Component, For, JSX } from "solid-js";
 import { TextAlignment } from "../../../../types/text";
 import SidebarButton from "../../../ui/SidebarButton/SidebarButton";

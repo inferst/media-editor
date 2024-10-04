@@ -1,6 +1,6 @@
-import BlackSVG from "@assets/icons/black.svg";
-import NoFrameSVG from "@assets/icons/no_frame.svg";
-import WhiteSVG from "@assets/icons/white.svg";
+import BlackSVG from "@/assets/icons/black.svg";
+import NoFrameSVG from "@/assets/icons/no_frame.svg";
+import WhiteSVG from "@/assets/icons/white.svg";
 import { Component, For, JSX } from "solid-js";
 import { TextStyle } from "../../../../types/text";
 import SidebarButton from "../../../ui/SidebarButton/SidebarButton";

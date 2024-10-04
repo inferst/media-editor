@@ -1,0 +1,37 @@
+.resize-button {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #fff;
+  border-radius: 8px;
+  margin-left: -4px;
+  margin-top: -4px;
+  z-index: 20;
+
+  &.left-top {
+    left: 0;
+    top: 0;
+  }
+
+  &.right-top {
+    left: 100%;
+    top: 0;
+  }
+
+  &.left-bottom {
+    left: 0;
+    top: 100%;
+  }
+
+  &.right-bottom {
+    left: 100%;
+    top: 100%;
+  }
+}
+
+.resizer {
+  position: absolute;
+  border: 1px dashed #fff;
+  margin-left: -1px;
+  margin-top: -1px;
+}

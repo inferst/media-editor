@@ -1,7 +1,7 @@
-import ArrowSVG from "@assets/tools/Arrow.svg";
-import BrushSVG from "@assets/tools/Brush.svg";
-import NeonSVG from "@assets/tools/Neon.svg";
-import PenSVG from "@assets/tools/Pen.svg";
+import ArrowSVG from "@/assets/tools/Arrow.svg";
+import BrushSVG from "@/assets/tools/Brush.svg";
+import NeonSVG from "@/assets/tools/Neon.svg";
+import PenSVG from "@/assets/tools/Pen.svg";
 import { createSignal } from "solid-js";
 import Adjust from "../../ui/Adjust/Adjust";
 import Colors from "../../ui/Colors/Colors";

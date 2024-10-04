@@ -1,8 +1,7 @@
-.element {
+.wrapper {
   position: absolute;
-  border: none;
-  outline: none;
   line-height: 1.2;
+  z-index: 10;
 
   &:hover {
     cursor: default;
@@ -11,9 +10,8 @@
   &.edit {
     cursor: text;
   }
-}
 
-.selected {
-  border: 1px dashed #fff;
-  margin: -1px;
+  .element {
+    transform-origin: top left;
+  }
 }

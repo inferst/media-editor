@@ -9,6 +9,7 @@ import BrowseFile from "./BrowseFile";
 import styles from "./Editor.module.css";
 import { EditorContext, EditorContextValue } from "./editorContext";
 import { TextEditor } from "./TextEditor/TextEditor";
+import { DownloadButton } from "./DownloadButton/DownloadButton";
 
 const editorWorker = new EditorWorker();
 
@@ -143,6 +144,26 @@ export function Editor() {
     }
   };
 
+  const handleDownloadButtonClick = () => {
+    if (canvasRef) {
+      canvasRef.toBlob(
+        (blob) => {
+          if (blob) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "image.png";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }
+        },
+        "image/png",
+        1,
+      );
+    }
+  };
+
   return (
     <EditorContext.Provider value={context}>
       <div class={styles.editor}>
@@ -158,6 +179,7 @@ export function Editor() {
         </div>
         <Sidebar />
       </div>
+      <DownloadButton onClick={handleDownloadButtonClick} />
     </EditorContext.Provider>
   );
 }

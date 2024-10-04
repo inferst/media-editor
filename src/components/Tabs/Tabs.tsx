@@ -1,8 +1,8 @@
-import BrushSVG from "@assets/icons/brush.svg";
-import CropSVG from "@assets/icons/crop.svg";
-import EnhanceSVG from "@assets/icons/enhance.svg";
-import SmileSVG from "@assets/icons/smile.svg";
-import TextSVG from "@assets/icons/text.svg";
+import BrushSVG from "@/assets/icons/brush.svg";
+import CropSVG from "@/assets/icons/crop.svg";
+import EnhanceSVG from "@/assets/icons/enhance.svg";
+import SmileSVG from "@/assets/icons/smile.svg";
+import TextSVG from "@/assets/icons/text.svg";
 import clsx from "clsx";
 import { createMemo, createSignal, For, JSX, ValidComponent } from "solid-js";
 import { Dynamic } from "solid-js/web";
