@@ -1,4 +1,4 @@
-import { TextOptions } from "../../../types/text";
+import { TextOptions } from "@/types";
 
 export const getDefaultTextOptions: () => TextOptions = () => ({
   font: "Roboto",

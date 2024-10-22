@@ -1,9 +1,5 @@
 .contenteditable {
-  display: inline;
-  border: none;
-  outline: none;
   cursor: default;
-  padding: 0 6px;
 
   &:hover {
     cursor: default;
@@ -12,9 +8,4 @@
   &.edit {
     cursor: text;
   }
-
-  filter: url("#round");
-
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
 }

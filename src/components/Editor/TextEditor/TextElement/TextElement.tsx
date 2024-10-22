@@ -2,17 +2,9 @@ import { createClickOutside } from "@/hooks/createOusideClick";
 import { Position, Rect, Size, TextOptions } from "@/types";
 import { px, stripHtmlTags } from "@/utils";
 import clsx from "clsx";
-import {
-  Component,
-  createEffect,
-  createSignal,
-  on,
-  onMount,
-  Show,
-} from "solid-js";
+import { Component, createEffect, createSignal, on, onMount } from "solid-js";
 import { useEditorContext } from "../../editorContext";
 import { ContentEditable } from "./ContentEditable/ContentEditable";
-import { SVGFilter } from "./SVGFilter/SVGFilter";
 import styles from "./TextElement.module.css";
 
 export type DragStartEvent = {
@@ -21,6 +13,7 @@ export type DragStartEvent = {
 
 export type TextElementProps = {
   isSelected: boolean;
+  isDisabled: boolean;
   options: TextOptions;
   position: Position;
   size: Size;
@@ -54,7 +47,6 @@ export const TextElement: Component<TextElementProps> = (props) => {
       () => props.position,
       () => {
         requestAnimationFrame(() => {
-          // console.log("effect props.position");
           props.onRender(getInnerRect(), getOuterRect());
         });
       },
@@ -68,7 +60,6 @@ export const TextElement: Component<TextElementProps> = (props) => {
       value != props.size.width &&
       props.size.width > 0
     ) {
-      // console.log("effect props.size.width", props.size.width);
       const width = wrapper.offsetWidth;
       setScale(props.size.width / width);
     }
@@ -109,6 +100,10 @@ export const TextElement: Component<TextElementProps> = (props) => {
   };
 
   const handleMouseDown = (event: MouseEvent) => {
+    if (props.isDisabled) {
+      return;
+    }
+
     if (!props.isSelected) {
       props.onMouseDown(
         {
@@ -159,6 +154,9 @@ export const TextElement: Component<TextElementProps> = (props) => {
       style={{
         left: px(props.position.left),
         top: px(props.position.top),
+        position: "absolute",
+        "line-height": "1.2",
+        "z-index": 10,
       }}
     >
       <div
@@ -170,6 +168,7 @@ export const TextElement: Component<TextElementProps> = (props) => {
           "text-align": props.options.alignment,
           "font-family": props.options.font,
           "font-size": `${props.options.size}px`,
+          "transform-origin": "top left",
         }}
       >
         <ContentEditable
@@ -179,9 +178,6 @@ export const TextElement: Component<TextElementProps> = (props) => {
           onInput={handleInput}
         />
       </div>
-      <Show when={props.options.style == "white"}>
-        <SVGFilter />
-      </Show>
     </div>
   );
 };

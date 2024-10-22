@@ -1,13 +1,15 @@
-import { Position, Rect, Size, TextOptions } from "@/types";
+import { Position, Rect, Size, TextElementOptions, TextOptions } from "@/types";
 import { Key } from "@solid-primitives/keyed";
 import clsx from "clsx";
 import {
+  Component,
   createEffect,
   createMemo,
   createSignal,
   on,
   onCleanup,
   onMount,
+  Setter,
   Show,
 } from "solid-js";
 import { useEditorContext } from "../editorContext";
@@ -15,15 +17,12 @@ import { Resizer } from "./Resizer/Resizer";
 import styles from "./TextEditor.module.css";
 import { TextElement } from "./TextElement/TextElement";
 
-type TextElement = {
-  id: string;
-  position: Position;
-  size: Size;
-  options: TextOptions;
+export type TextEditorProps = {
+  isDisabled: boolean;
+  setRef: Setter<HTMLDivElement | undefined>;
 };
 
-export const TextEditor = () => {
-  const [elements, setElements] = createSignal<TextElement[]>([]);
+export const TextEditor: Component<TextEditorProps> = (props) => {
   const [selectedElementId, setSelectedElementId] = createSignal<
     string | undefined
   >();
@@ -41,13 +40,13 @@ export const TextEditor = () => {
   const context = useEditorContext("TextEditor");
 
   const handleMouseDown = (event: MouseEvent) => {
-    if (isEditable()) {
+    if (isEditable() && !props.isDisabled) {
       event.preventDefault();
 
       const id = crypto.randomUUID();
 
-      setElements([
-        ...elements(),
+      context.setTextElements([
+        ...context.state.textElements(),
         {
           id,
           position: {
@@ -65,8 +64,8 @@ export const TextEditor = () => {
 
   createEffect(
     on(context.state.textOptions, () => {
-      setElements(
-        elements().map((element) => {
+      context.setTextElements(
+        context.state.textElements().map((element) => {
           if (element.id == selectedElementId()) {
             return {
               ...element,
@@ -86,6 +85,10 @@ export const TextEditor = () => {
     offset: Position,
     rect: Rect,
   ) => {
+    if (props.isDisabled) {
+      return;
+    }
+
     setSelectedElementId(id);
     context.setTextOptions(options);
     setIsDrag(true);
@@ -95,8 +98,8 @@ export const TextEditor = () => {
 
   const handleElementBlur = (id: string, isEmpty: boolean) => {
     if (isEmpty) {
-      setElements(
-        elements().filter((element) => {
+      context.setTextElements(
+        context.state.textElements().filter((element) => {
           return element.id != id;
         }),
       );
@@ -107,9 +110,9 @@ export const TextEditor = () => {
     }
   };
 
-  const updateElement = (id: string, data: Partial<TextElement>) => {
-    setElements(
-      elements().map((element) => {
+  const updateElement = (id: string, data: Partial<TextElementOptions>) => {
+    context.setTextElements(
+      context.state.textElements().map((element) => {
         if (element.id == id) {
           return {
             ...element,
@@ -123,7 +126,7 @@ export const TextEditor = () => {
   };
 
   const handleMouseMove = (event: MouseEvent) => {
-    if (editor) {
+    if (editor && !props.isDisabled) {
       const rect = editor.getBoundingClientRect();
       const position = {
         left: event.clientX - rect.left,
@@ -131,8 +134,8 @@ export const TextEditor = () => {
       };
 
       if (isDrag()) {
-        setElements(
-          elements().map((element) => {
+        context.setTextElements(
+          context.state.textElements().map((element) => {
             if (element.id == selectedElementId()) {
               return {
                 ...element,
@@ -189,8 +192,6 @@ export const TextEditor = () => {
   const handleResize = (position: Position, size: Size) => {
     const id = selectedElementId();
 
-    // console.log(position, size);
-
     if (id) {
       updateElement(id, {
         position,
@@ -218,18 +219,22 @@ export const TextEditor = () => {
 
   return (
     <div
-      ref={editor}
+      ref={(ref) => {
+        editor = ref;
+        props.setRef(ref);
+      }}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       class={clsx(styles.editor, {
-        [styles.editable]: isEditable(),
+        [styles.editable]: isEditable() && !props.isDisabled,
       })}
     >
-      <Key each={elements()} by={(item) => item.id}>
+      <Key each={context.state.textElements()} by={(item) => item.id}>
         {(item) => (
           <TextElement
             resizerRef={uiRef()}
             isSelected={selectedElementId() == item().id}
+            isDisabled={props.isDisabled}
             options={item().options}
             position={item().position}
             size={item().size}
@@ -242,7 +247,7 @@ export const TextEditor = () => {
           />
         )}
       </Key>
-      <Show when={isSelected()}>
+      <Show when={isSelected() && !props.isDisabled}>
         <Resizer
           setRef={setUiRef}
           position={resizerPosition()}

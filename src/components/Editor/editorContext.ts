@@ -1,11 +1,11 @@
+import { EditorType, TextElementOptions, TextOptions } from "@/types";
 import { Accessor, createContext, useContext } from "solid-js";
-import { EditorType } from "../../types/editor";
-import { TextOptions } from "../../types/text";
 
 export type EditorState = {
   editorType: Accessor<EditorType>;
   textOptions: Accessor<TextOptions>;
   textOptionsRef: Accessor<HTMLElement | undefined>;
+  textElements: Accessor<TextElementOptions[]>;
 };
 
 export type EditorContextValue = {
@@ -27,6 +27,7 @@ export type EditorContextValue = {
   onEnhanceChange: (value: number) => void;
 
   setTextOptions: (options: TextOptions) => void;
+  setTextElements: (elements: TextElementOptions[]) => void;
 };
 
 export const EditorContext = createContext<EditorContextValue>();

@@ -1,15 +1,20 @@
-import { createSignal, Match, onMount, Show, Switch } from "solid-js";
-import { EditorType } from "../../types/editor";
-import { TextOptions } from "../../types/text";
-import { MessageData } from "../../types/types";
+import {
+  EditorType,
+  MessageData,
+  TextElementOptions,
+  TextOptions,
+} from "@/types";
+import { createSignal, onMount, Show } from "solid-js";
 import EditorWorker from "../../workers/editorWorker?worker";
 import { getDefaultTextOptions } from "../content/Text/textOptions";
 import { Sidebar } from "../Sidebar/Sidebar";
 import BrowseFile from "./BrowseFile";
+import { download } from "./download/download";
+import { DownloadButton } from "./DownloadButton/DownloadButton";
 import styles from "./Editor.module.css";
 import { EditorContext, EditorContextValue } from "./editorContext";
+import { SVGFilter } from "./TextEditor/SVGFilter/SVGFilter";
 import { TextEditor } from "./TextEditor/TextEditor";
-import { DownloadButton } from "./DownloadButton/DownloadButton";
 
 const editorWorker = new EditorWorker();
 
@@ -25,6 +30,10 @@ export function Editor() {
   >();
   const [textOptions, setTextOptions] = createSignal<TextOptions>(
     getDefaultTextOptions(),
+  );
+
+  const [textElements, setTextElements] = createSignal<TextElementOptions[]>(
+    [],
   );
 
   let canvasRef: HTMLCanvasElement | undefined;
@@ -116,6 +125,7 @@ export function Editor() {
       editorType,
       textOptions,
       textOptionsRef: textSettingsRef,
+      textElements,
     },
     onBrightnessChange,
     onContrastChange,
@@ -130,6 +140,7 @@ export function Editor() {
     onEditorTypeChange,
 
     setTextOptions,
+    setTextElements,
     setTextOptionsRef,
   };
 
@@ -144,25 +155,19 @@ export function Editor() {
     }
   };
 
-  const handleDownloadButtonClick = () => {
-    if (canvasRef) {
-      canvasRef.toBlob(
-        (blob) => {
-          if (blob) {
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "image.png";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-          }
-        },
-        "image/png",
-        1,
+  const handleDownloadButtonClick = async () => {
+    const textEditor = textEditorRef();
+
+    if (textEditor && canvasRef) {
+      const fragment = textEditor.outerHTML;
+      const fonts = new Set(
+        textElements().map((element) => element.options.font),
       );
+      download(canvasRef, fragment, Array.from(fonts));
     }
   };
+
+  const [textEditorRef, setTextEditorRef] = createSignal<HTMLDivElement>();
 
   return (
     <EditorContext.Provider value={context}>
@@ -170,11 +175,11 @@ export function Editor() {
         <div ref={containerRef} class={styles.container}>
           <Show when={isLoaded()} fallback={<BrowseFile onLoad={handleLoad} />}>
             <canvas ref={canvasRef} class={styles.canvas} />
-            <Switch>
-              <Match when={editorType() === "text"}>
-                <TextEditor />
-              </Match>
-            </Switch>
+            <TextEditor
+              setRef={setTextEditorRef}
+              isDisabled={editorType() !== "text"}
+            />
+            <SVGFilter />
           </Show>
         </div>
         <Sidebar />
