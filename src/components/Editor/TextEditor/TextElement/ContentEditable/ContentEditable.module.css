@@ -1,4 +1,6 @@
-.wrapper {
+.contenteditable {
+  cursor: default;
+
   &:hover {
     cursor: default;
   }

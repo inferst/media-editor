@@ -382,7 +382,7 @@ const init = async (data: OffscreenData) => {
   gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
   initToolShaders(data.bitmap);
-  initEnhanceShaders(data.bitmap);
+  // initEnhanceShaders(data.bitmap);
   // initSharpenShaders();
 
   await initImage(data.bitmap);

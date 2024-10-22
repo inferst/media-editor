@@ -1,5 +1,6 @@
+import { TextAlignment, TextOptions, TextStyle } from "@/types";
+import { hexToHsv, HsvObject, hsvToHex } from "@/utils";
 import { createSignal, For, onMount } from "solid-js";
-import { TextAlignment, TextOptions, TextStyle } from "../../../types/text";
 import { useEditorContext } from "../../Editor/editorContext";
 import Adjust from "../../ui/Adjust/Adjust";
 import Colors from "../../ui/Colors/Colors";
@@ -9,25 +10,15 @@ import SidebarRow from "../../ui/SidebarRow/SidebarRow";
 import { Alignment } from "./Alignment/Alignment";
 import { Style } from "./Style/Style";
 import styles from "./Text.module.css";
-import { hexToHsv, HsvObject, hsvToHex } from "../../../utils/color";
-// import { getDefaultTextOptions } from "./textOptions";
 
 type TextFont = {
   style: string;
+  title: string;
   font: string;
 };
 
-// const defaultOptions = getDefaultTextOptions();
-
 const Text = () => {
   const [ref, setRef] = createSignal<HTMLElement | undefined>();
-  // const [color, setColor] = createSignal(defaultOptions.color);
-  // const [alignment, setAlignment] = createSignal<TextAlignment>(
-  //   defaultOptions.alignment,
-  // );
-  // const [style, setStyle] = createSignal<TextStyle>(defaultOptions.style);
-  // const [size, setSize] = createSignal(defaultOptions.size);
-  // const [font, setFont] = createSignal(defaultOptions.font);
 
   const context = useEditorContext("Text");
 
@@ -35,34 +26,42 @@ const Text = () => {
     {
       style: styles.roboto,
       font: "Roboto",
+      title: "Roboto",
     },
     {
       style: styles.typewriter,
       font: "Typewriter",
+      title: "Typewriter",
     },
     {
       style: styles.avenir,
-      font: "Avenir Next",
+      font: "AvenirNext",
+      title: "Avenir Next",
     },
     {
       style: styles.courier,
-      font: "Courier New",
+      font: "CourierNew",
+      title: "Courier New",
     },
     {
       style: styles.noteworthy,
       font: "Noteworthy",
+      title: "Noteworthy",
     },
     {
       style: styles.georgia,
       font: "Georgia",
+      title: "Georgia",
     },
     {
       style: styles.papyrus,
       font: "Papyrus",
+      title: "Papyrus",
     },
     {
       style: styles.snell,
-      font: "Snell Roundhand",
+      font: "SnellRoundhand",
+      title: "Snell Roundhand",
     },
   ];
 
@@ -82,7 +81,6 @@ const Text = () => {
   };
 
   const handleAlignmentClick = (item: TextAlignment) => {
-    // setAlignment(item);
     setTextOptions({
       ...context.state.textOptions(),
       alignment: item,
@@ -90,7 +88,6 @@ const Text = () => {
   };
 
   const handleStyleClick = (item: TextStyle) => {
-    // setStyle(item);
     setTextOptions({
       ...context.state.textOptions(),
       style: item,
@@ -98,7 +95,6 @@ const Text = () => {
   };
 
   const handleSizeChange = (value: number) => {
-    // setSize(value);
     setTextOptions({
       ...context.state.textOptions(),
       size: value,
@@ -106,7 +102,6 @@ const Text = () => {
   };
 
   const handleFontChange = (value: string) => {
-    // setFont(value);
     setTextOptions({
       ...context.state.textOptions(),
       font: value,
@@ -114,7 +109,6 @@ const Text = () => {
   };
 
   const handleColorChange = (value: HsvObject) => {
-    // setColor(value);
     setTextOptions({
       ...context.state.textOptions(),
       color: hsvToHex(value),
@@ -167,7 +161,7 @@ const Text = () => {
               isActive={context.state.textOptions().font == item.font}
               class={item.style}
             >
-              {item.font}
+              {item.title}
             </SidebarButton>
           )}
         </For>

@@ -1,46 +1,51 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
 
 @font-face {
+  font-family: Roboto;
+  src: url("./assets/fonts/Roboto.woff2");
+}
+
+@font-face {
   font-family: Typewriter;
-  src: url("./assets/fonts/AmericanTypewLH-MedCond.woff2");
+  src: url("./assets/fonts/Typewriter.woff2");
 }
 
 @font-face {
-  font-family: "Avenir Next";
-  src: url("./assets/fonts/AvenirNextCyr-BoldItalic.woff2");
+  font-family: AvenirNext;
+  src: url("./assets/fonts/AvenirNext.woff2");
 }
 
 @font-face {
-  font-family: "Courier New";
-  src: url("./assets/fonts/CourierNewPS-BoldMT.woff2");
+  font-family: CourierNew;
+  src: url("./assets/fonts/CourierNew.woff2");
 }
 
 @font-face {
   font-family: Noteworthy;
-  src: url("./assets/fonts/Noteworthy-Bold.woff2");
+  src: url("./assets/fonts/Noteworthy.woff2");
 }
 
 @font-face {
   font-family: Georgia;
-  src: url("./assets/fonts/Georgia-Bold.woff2");
+  src: url("./assets/fonts/Georgia.woff2");
 }
 
 @font-face {
   font-family: Papyrus;
-  src: url("./assets/fonts/1-papyrus.woff2");
+  src: url("./assets/fonts/Papyrus.woff2");
 }
 
 @font-face {
   font-family: SnellRoundhand;
-  src: url("./assets/fonts/SnellRoundhandLTStd-BdScr.woff2");
+  src: url("./assets/fonts/SnellRoundhand.woff2");
 }
 
 :root {
-  font-family: Roboto;
+  font-family: Roboto, sans-serif;
   color-scheme: light dark;
   color: #fff;
   font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  text-rendering: optimizelegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

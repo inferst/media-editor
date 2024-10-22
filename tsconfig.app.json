@@ -30,12 +30,13 @@
       "vite/client"
     ],
     "paths": {
-      "@assets/*": [
-        "src/assets/*"
+      "@/*": [
+        "./src/*"
       ]
     }
   },
   "include": [
-    "src"
-, "public/tools"  ]
+    "src",
+    "public/tools"
+  ]
 }

@@ -1,5 +1,5 @@
-import Redo from "@assets/icons/redo.svg";
-import Undo from "@assets/icons/undo.svg";
+import Redo from "@/assets/icons/redo.svg";
+import Undo from "@/assets/icons/undo.svg";
 import { Tabs } from "../Tabs/Tabs";
 import styles from "./Sidebar.module.css";
 

@@ -1,13 +1,14 @@
-import ArrowSVG from "@assets/tools/Arrow.svg";
-import BrushSVG from "@assets/tools/Brush.svg";
-import NeonSVG from "@assets/tools/Neon.svg";
-import PenSVG from "@assets/tools/Pen.svg";
+import ArrowSVG from "@/assets/tools/Arrow.svg";
+import BrushSVG from "@/assets/tools/Brush.svg";
+import NeonSVG from "@/assets/tools/Neon.svg";
+import PenSVG from "@/assets/tools/Pen.svg";
 import { createSignal } from "solid-js";
 import Adjust from "../../ui/Adjust/Adjust";
 import Colors from "../../ui/Colors/Colors";
 import Label from "../../ui/Label/Label";
 import ToolButton from "../../ui/ToolButton/ToolButton";
 import styles from "./Brush.module.css";
+import { hexToHsv } from "@/utils";
 
 type Tool = "pen" | "arrow" | "brush" | "neon" | "blur" | "eraser";
 
@@ -29,7 +30,7 @@ const Brush = () => {
 
   return (
     <>
-      <Colors colors={colors} onChange={setColor} />
+      <Colors color={hexToHsv(color())} colors={colors} onChange={setColor} />
       <Adjust
         heading="Size"
         min={0}
