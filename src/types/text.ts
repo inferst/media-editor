@@ -18,3 +18,8 @@ export type TextElementOptions = {
   size: Size;
   options: TextOptions;
 };
+
+export type TextFont = {
+  title: string;
+  font: string;
+};

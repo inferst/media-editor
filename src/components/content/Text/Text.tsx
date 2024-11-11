@@ -1,5 +1,5 @@
 import { TextAlignment, TextOptions, TextStyle } from "@/types";
-import { hexToHsv, HsvObject, hsvToHex } from "@/utils";
+import { fonts, hexToHsv, HsvObject, hsvToHex } from "@/utils";
 import { createSignal, For, onMount } from "solid-js";
 import { useEditorContext } from "../../Editor/editorContext";
 import Adjust from "../../ui/Adjust/Adjust";
@@ -11,59 +11,10 @@ import { Alignment } from "./Alignment/Alignment";
 import { Style } from "./Style/Style";
 import styles from "./Text.module.css";
 
-type TextFont = {
-  style: string;
-  title: string;
-  font: string;
-};
-
 const Text = () => {
   const [ref, setRef] = createSignal<HTMLElement | undefined>();
 
   const context = useEditorContext("Text");
-
-  const fonts: TextFont[] = [
-    {
-      style: styles.roboto,
-      font: "Roboto",
-      title: "Roboto",
-    },
-    {
-      style: styles.typewriter,
-      font: "Typewriter",
-      title: "Typewriter",
-    },
-    {
-      style: styles.avenir,
-      font: "AvenirNext",
-      title: "Avenir Next",
-    },
-    {
-      style: styles.courier,
-      font: "CourierNew",
-      title: "Courier New",
-    },
-    {
-      style: styles.noteworthy,
-      font: "Noteworthy",
-      title: "Noteworthy",
-    },
-    {
-      style: styles.georgia,
-      font: "Georgia",
-      title: "Georgia",
-    },
-    {
-      style: styles.papyrus,
-      font: "Papyrus",
-      title: "Papyrus",
-    },
-    {
-      style: styles.snell,
-      font: "SnellRoundhand",
-      title: "Snell Roundhand",
-    },
-  ];
 
   const colors = [
     "#FFFFFF",
@@ -145,9 +96,9 @@ const Text = () => {
       </div>
       <Adjust
         heading="Size"
-        min={0}
+        min={8}
         max={48}
-        default={0}
+        default={8}
         value={context.state.textOptions().size}
         onChange={handleSizeChange}
         color={context.state.textOptions().color}
@@ -159,7 +110,7 @@ const Text = () => {
             <SidebarButton
               onClick={() => handleFontChange(item.font)}
               isActive={context.state.textOptions().font == item.font}
-              class={item.style}
+              style={{ "font-family": item.font }}
             >
               {item.title}
             </SidebarButton>

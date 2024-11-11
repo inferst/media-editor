@@ -1,5 +1,18 @@
 .contenteditable {
   cursor: default;
+  border: none;
+  outline: none;
+
+  p {
+    display: inline;
+    margin: 0;
+    padding: 0 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    -webkit-text-stroke-color: black;
+    -webkit-box-decoration-break: clone; /* stylelint-disable-line property-no-vendor-prefix */
+    box-decoration-break: clone;
+  }
 
   &:hover {
     cursor: default;

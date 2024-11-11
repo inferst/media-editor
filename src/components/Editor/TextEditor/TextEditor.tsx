@@ -158,6 +158,16 @@ export const TextEditor: Component<TextEditorProps> = (props) => {
   const handleRender = (inner: Rect, outer: Rect) => {
     setSelectedRect(outer);
     setInnerSize(inner);
+
+    // Prevent auto scrolling when typing outside editor bounds
+    if (editor) {
+      requestAnimationFrame(() => {
+        if (editor) {
+          editor.scrollTop = 0;
+          editor.scrollLeft = 0;
+        }
+      });
+    }
   };
 
   const handleMount = (id: string, inner: Rect, outer: Rect) => {
@@ -241,8 +251,8 @@ export const TextEditor: Component<TextEditorProps> = (props) => {
             onMount={(inner, outer) => handleMount(item().id, inner, outer)}
             onRender={(inner, outer) => handleRender(inner, outer)}
             onBlur={(isEmpty) => handleElementBlur(item().id, isEmpty)}
-            onMouseDown={(event, options, rect) =>
-              handleElementMouseDown(item().id, options, event.offset, rect)
+            onMouseDown={(offset, options, rect) =>
+              handleElementMouseDown(item().id, options, offset, rect)
             }
           />
         )}

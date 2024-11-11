@@ -1,4 +1,12 @@
-export const SVGFilter = () => {
+import { Component, mergeProps } from "solid-js";
+
+type SVGFilterProps = {
+  blur?: number;
+};
+
+export const SVGFilter: Component<SVGFilterProps> = (_props) => {
+  const props = mergeProps({ blur: 6 }, _props);
+
   return (
     <svg
       style={{ visibility: "hidden", position: "absolute" }}
@@ -9,14 +17,18 @@ export const SVGFilter = () => {
     >
       <defs>
         <filter id="round">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+          <feGaussianBlur
+            in="SourceGraphic"
+            stdDeviation={props.blur}
+            result="blur"
+          />
           <feColorMatrix
             in="blur"
             type="matrix"
             values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9"
-            result="goo"
+            result="matrix"
           />
-          <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+          <feComposite in="SourceGraphic" in2="matrix" operator="atop" />
         </filter>
       </defs>
     </svg>

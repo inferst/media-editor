@@ -1,43 +1,31 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
-
 @font-face {
   font-family: Roboto;
   src: url("./assets/fonts/Roboto.woff2");
 }
 
 @font-face {
-  font-family: Typewriter;
-  src: url("./assets/fonts/Typewriter.woff2");
+  font-family: Overdoze;
+  src: url("./assets/fonts/Overdoze.woff2");
 }
 
 @font-face {
-  font-family: AvenirNext;
-  src: url("./assets/fonts/AvenirNext.woff2");
+  font-family: AmaticSC;
+  src: url("./assets/fonts/AmaticSC.woff2");
 }
 
 @font-face {
-  font-family: CourierNew;
-  src: url("./assets/fonts/CourierNew.woff2");
+  font-family: Lobster;
+  src: url("./assets/fonts/Lobster.woff2");
 }
 
 @font-face {
-  font-family: Noteworthy;
-  src: url("./assets/fonts/Noteworthy.woff2");
+  font-family: RussoOne;
+  src: url("./assets/fonts/RussoOne.woff2");
 }
 
 @font-face {
-  font-family: Georgia;
-  src: url("./assets/fonts/Georgia.woff2");
-}
-
-@font-face {
-  font-family: Papyrus;
-  src: url("./assets/fonts/Papyrus.woff2");
-}
-
-@font-face {
-  font-family: SnellRoundhand;
-  src: url("./assets/fonts/SnellRoundhand.woff2");
+  font-family: TenorSans;
+  src: url("./assets/fonts/TenorSans.woff2");
 }
 
 :root {

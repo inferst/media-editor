@@ -7,10 +7,6 @@ import { useEditorContext } from "../../editorContext";
 import { ContentEditable } from "./ContentEditable/ContentEditable";
 import styles from "./TextElement.module.css";
 
-export type DragStartEvent = {
-  offset: Position;
-};
-
 export type TextElementProps = {
   isSelected: boolean;
   isDisabled: boolean;
@@ -19,17 +15,19 @@ export type TextElementProps = {
   size: Size;
   resizerRef: HTMLDivElement | undefined;
   onMouseDown: (
-    event: DragStartEvent,
+    offset: Position,
     options: TextOptions,
     boundingRect: Rect,
   ) => void;
-  onBlur: (isEmpty: boolean) => void;
   onRender: (inner: Rect, outer: Rect) => void;
   onMount: (inner: Rect, outer: Rect) => void;
+  onBlur: (isEmpty: boolean) => void;
 };
 
 export const TextElement: Component<TextElementProps> = (props) => {
   const [isEditable, setIsEditable] = createSignal(true);
+
+  const [editableRef, setEditableRef] = createSignal<HTMLDivElement>();
 
   let wrapper: HTMLDivElement | undefined;
   let element: HTMLDivElement | undefined;
@@ -104,17 +102,15 @@ export const TextElement: Component<TextElementProps> = (props) => {
       return;
     }
 
-    if (!props.isSelected) {
-      props.onMouseDown(
-        {
-          offset: {
-            left: event.offsetX * scale(),
-            top: event.offsetY * scale(),
-          },
-        },
-        props.options,
-        getOuterRect(),
-      );
+    if (!props.isSelected && wrapper) {
+      const wrapperRect = wrapper.getBoundingClientRect();
+
+      const offset = {
+        left: event.clientX - wrapperRect.left,
+        top: event.clientY - wrapperRect.top,
+      };
+
+      props.onMouseDown(offset, props.options, getOuterRect());
       event.preventDefault();
     } else {
       setIsEditable(true);
@@ -126,8 +122,10 @@ export const TextElement: Component<TextElementProps> = (props) => {
   const { setRef } = createClickOutside((event) => {
     const target = event.target as HTMLElement;
     const textOptionsRef = context.state.textOptionsRef();
+    const element = editableRef();
 
     if (
+      element &&
       wrapper &&
       target &&
       textOptionsRef &&
@@ -135,12 +133,16 @@ export const TextElement: Component<TextElementProps> = (props) => {
       props.resizerRef &&
       !props.resizerRef.contains(target)
     ) {
-      props.onBlur(stripHtmlTags(wrapper.innerHTML) == "");
+      props.onBlur(stripHtmlTags(element.innerHTML).trim() == "");
 
       setIsEditable(false);
-      wrapper.blur();
+      // wrapper.blur();
     }
   });
+
+  const handleContentEditableRef = (ref: HTMLDivElement) => {
+    setEditableRef(ref);
+  };
 
   return (
     <div
@@ -167,7 +169,7 @@ export const TextElement: Component<TextElementProps> = (props) => {
           scale: scale(),
           "text-align": props.options.alignment,
           "font-family": props.options.font,
-          "font-size": `${props.options.size}px`,
+          "font-size": `${props.options.size * 2}px`,
           "transform-origin": "top left",
         }}
       >
@@ -176,6 +178,7 @@ export const TextElement: Component<TextElementProps> = (props) => {
           style={props.options.style}
           color={props.options.color}
           onInput={handleInput}
+          setRef={handleContentEditableRef}
         />
       </div>
     </div>
