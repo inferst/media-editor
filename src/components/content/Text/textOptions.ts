@@ -1,9 +1,10 @@
 import { TextOptions } from "@/types";
+import { hexToHsv } from "@/utils";
 
 export const getDefaultTextOptions: () => TextOptions = () => ({
   font: "Roboto",
   alignment: "left",
   style: "noframe",
-  color: "#ffffff",
+  color: hexToHsv("#ffffff"),
   size: 24,
 });

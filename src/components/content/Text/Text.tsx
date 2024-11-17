@@ -1,5 +1,5 @@
 import { TextAlignment, TextOptions, TextStyle } from "@/types";
-import { fonts, hexToHsv, HsvObject, hsvToHex } from "@/utils";
+import { fonts, HsvObject, hsvToHex } from "@/utils";
 import { createSignal, For, onMount } from "solid-js";
 import { useEditorContext } from "../../Editor/editorContext";
 import Adjust from "../../ui/Adjust/Adjust";
@@ -62,7 +62,7 @@ const Text = () => {
   const handleColorChange = (value: HsvObject) => {
     setTextOptions({
       ...context.state.textOptions(),
-      color: hsvToHex(value),
+      color: value,
     });
   };
 
@@ -76,7 +76,7 @@ const Text = () => {
   return (
     <div ref={setRef}>
       <Colors
-        color={hexToHsv(context.state.textOptions().color)}
+        color={context.state.textOptions().color}
         colors={colors}
         onChange={handleColorChange}
       />
@@ -101,7 +101,7 @@ const Text = () => {
         default={8}
         value={context.state.textOptions().size}
         onChange={handleSizeChange}
-        color={context.state.textOptions().color}
+        color={hsvToHex(context.state.textOptions().color)}
       />
       <Label class={styles.label}>Font</Label>
       <SidebarRow>

@@ -1,6 +1,6 @@
 import { createClickOutside } from "@/hooks/createOusideClick";
 import { Position, Rect, Size, TextOptions } from "@/types";
-import { px, stripHtmlTags } from "@/utils";
+import { hsvToHex, px, stripHtmlTags } from "@/utils";
 import clsx from "clsx";
 import { Component, createEffect, createSignal, on, onMount } from "solid-js";
 import { useEditorContext } from "../../editorContext";
@@ -176,7 +176,7 @@ export const TextElement: Component<TextElementProps> = (props) => {
         <ContentEditable
           isEditable={isEditable()}
           style={props.options.style}
-          color={props.options.color}
+          color={hsvToHex(props.options.color)}
           onInput={handleInput}
           setRef={handleContentEditableRef}
         />
