@@ -22,6 +22,7 @@ export type ContentEditableProps = {
 
 export const ContentEditable: Component<ContentEditableProps> = (props) => {
   const [id, setId] = createSignal("");
+  const [isEmpty, setIsEmpty] = createSignal(true);
 
   let container: HTMLDivElement;
 
@@ -78,7 +79,16 @@ export const ContentEditable: Component<ContentEditableProps> = (props) => {
 
   const handleInput = () => {
     restoreContentEditable();
-    props.onInput(getContent(container));
+    const content = getContent(container);
+    props.onInput(content);
+    setIsEmpty(content == "");
+  };
+
+  // Prevent selection if no edit
+  const handleMouseDown = (event: MouseEvent) => {
+    if (!props.edit) {
+      event.preventDefault();
+    }
   };
 
   const getContent = (element: Element) => {
@@ -88,19 +98,27 @@ export const ContentEditable: Component<ContentEditableProps> = (props) => {
 
   const hex = createMemo(() => hsvToHex(props.color));
 
+  const backgroundColor = createMemo(() => {
+    return props.style == "white" && !isEmpty() ? hex() : undefined;
+  });
+
+  const color = createMemo(() => {
+    const computed = props.color.v > 50 && props.color.s < 50 ? "black" : "white";
+    return props.style == "white" ? computed : hsvToHex(props.color);
+  });
+
+  const filter = createMemo(() => {
+    return props.style == "white" && !isEmpty() ? 'url("#round")' : "none";
+  });
+
   const style = createMemo(() =>
     generateStyle({
       [`#${id()} span`]: {
-        "background-color": props.style == "white" ? hex() : undefined,
+        "background-color": backgroundColor(),
         "-webkit-text-stroke-width": props.style == "black" ? "2px" : undefined,
       },
     }),
   );
-
-  const color = createMemo(() => {
-    const computed = props.color.v > 50 ? "black" : "white";
-    return props.style == "white" ? computed : hsvToHex(props.color);
-  });
 
   return (
     <>
@@ -115,11 +133,12 @@ export const ContentEditable: Component<ContentEditableProps> = (props) => {
         spellcheck={false}
         contenteditable={props.edit}
         onInput={handleInput}
+        onMouseDown={handleMouseDown}
         class={clsx(styles.contenteditable, {
           [styles.edit]: props.edit,
         })}
         style={{
-          filter: props.style == "white" ? 'url("#round")' : "none",
+          filter: filter(),
           color: color(),
         }}
       />

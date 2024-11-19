@@ -156,19 +156,27 @@ export const Resizer: Component<ResizerProps> = (props) => {
       <div
         onMouseDown={(event) => handleMouseDown(event, "left-top")}
         class={clsx(styles["resize-button"], styles["left-top"])}
-      />
+      >
+        <div class={clsx(styles["resize-circle"])} />
+      </div>
       <div
         onMouseDown={(event) => handleMouseDown(event, "right-top")}
         class={clsx(styles["resize-button"], styles["right-top"])}
-      />
+      >
+        <div class={clsx(styles["resize-circle"])} />
+      </div>
       <div
         onMouseDown={(event) => handleMouseDown(event, "left-bottom")}
         class={clsx(styles["resize-button"], styles["left-bottom"])}
-      />
+      >
+        <div class={clsx(styles["resize-circle"])} />
+      </div>
       <div
         onMouseDown={(event) => handleMouseDown(event, "right-bottom")}
         class={clsx(styles["resize-button"], styles["right-bottom"])}
-      />
+      >
+        <div class={clsx(styles["resize-circle"])} />
+      </div>
     </div>
   );
 };
