@@ -14,7 +14,7 @@ import styles from "./Text.module.css";
 const Text = () => {
   const [ref, setRef] = createSignal<HTMLElement | undefined>();
 
-  const context = useEditorContext("Text");
+  const state = useEditorContext("Text").text;
 
   const colors = [
     "#FFFFFF",
@@ -28,40 +28,40 @@ const Text = () => {
   ];
 
   const setTextOptions = (options: TextOptions) => {
-    context.setTextOptions(options);
+    state.setTextOptions(options);
   };
 
   const handleAlignmentClick = (item: TextAlignment) => {
     setTextOptions({
-      ...context.state.textOptions(),
+      ...state.textOptions(),
       alignment: item,
     });
   };
 
   const handleStyleClick = (item: TextStyle) => {
     setTextOptions({
-      ...context.state.textOptions(),
+      ...state.textOptions(),
       style: item,
     });
   };
 
   const handleSizeChange = (value: number) => {
     setTextOptions({
-      ...context.state.textOptions(),
+      ...state.textOptions(),
       size: value,
     });
   };
 
   const handleFontChange = (value: string) => {
     setTextOptions({
-      ...context.state.textOptions(),
+      ...state.textOptions(),
       font: value,
     });
   };
 
   const handleColorChange = (value: HsvObject) => {
     setTextOptions({
-      ...context.state.textOptions(),
+      ...state.textOptions(),
       color: value,
     });
   };
@@ -69,27 +69,27 @@ const Text = () => {
   onMount(() => {
     const element = ref();
     if (element) {
-      context.setTextOptionsRef(element);
+      state.setTextOptionsRef(element);
     }
   });
 
   return (
     <div ref={setRef}>
       <Colors
-        color={context.state.textOptions().color}
+        color={state.textOptions().color}
         colors={colors}
         onChange={handleColorChange}
       />
       <div class={styles["text-row"]}>
         <SidebarRow isColumn={true}>
           <Alignment
-            value={context.state.textOptions().alignment}
+            value={state.textOptions().alignment}
             onClick={(value) => handleAlignmentClick(value)}
           />
         </SidebarRow>
         <SidebarRow isColumn={true}>
           <Style
-            value={context.state.textOptions().style}
+            value={state.textOptions().style}
             onClick={(value) => handleStyleClick(value)}
           />
         </SidebarRow>
@@ -99,9 +99,9 @@ const Text = () => {
         min={8}
         max={48}
         default={8}
-        value={context.state.textOptions().size}
+        value={state.textOptions().size}
         onChange={handleSizeChange}
-        color={hsvToHex(context.state.textOptions().color)}
+        color={hsvToHex(state.textOptions().color)}
       />
       <Label class={styles.label}>Font</Label>
       <SidebarRow>
@@ -109,7 +109,7 @@ const Text = () => {
           {(item) => (
             <SidebarButton
               onClick={() => handleFontChange(item.font)}
-              isActive={context.state.textOptions().font == item.font}
+              isActive={state.textOptions().font == item.font}
               style={{ "font-family": item.font }}
             >
               {item.title}

@@ -1,22 +1,17 @@
 import { EditorType, TextElementOptions, TextOptions } from "@/types";
 import { Accessor, createContext, useContext } from "solid-js";
 
-export type EditorState = {
-  editorType: Accessor<EditorType>;
+type TextEditorState = {
   textOptions: Accessor<TextOptions>;
   textOptionsRef: Accessor<HTMLElement | undefined>;
   textElements: Accessor<TextElementOptions[]>;
-  isDragging: boolean;
-  isDragged: boolean;
+
+  setTextOptions: (options: TextOptions) => void;
+  setTextOptionsRef: (ref: HTMLElement) => void;
+  setTextElements: (elements: TextElementOptions[]) => void;
 };
 
-export type EditorContextValue = {
-  state: EditorState;
-
-  setTextOptionsRef: (ref: HTMLElement) => void;
-
-  onEditorTypeChange: (type: EditorType) => void;
-
+type EnhanceEditorState = {
   onBrightnessChange: (value: number) => void;
   onContrastChange: (value: number) => void;
   onVignetteChange: (value: number) => void;
@@ -27,9 +22,14 @@ export type EditorContextValue = {
   onSaturationChange: (value: number) => void;
   onFadeChange: (value: number) => void;
   onEnhanceChange: (value: number) => void;
+};
 
-  setTextOptions: (options: TextOptions) => void;
-  setTextElements: (elements: TextElementOptions[]) => void;
+export type EditorContextValue = {
+  editorType: Accessor<EditorType>;
+  onEditorTypeChange: (type: EditorType) => void;
+
+  text: TextEditorState;
+  enhance: EnhanceEditorState;
 };
 
 export const EditorContext = createContext<EditorContextValue>();

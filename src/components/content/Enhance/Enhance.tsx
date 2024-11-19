@@ -15,55 +15,55 @@ const Enhance = () => {
   const [grain, setGrain] = createSignal(0);
   const [sharpen, setSharpen] = createSignal(0);
 
-  const context = useEditorContext("Enhance");
+  const state = useEditorContext("Enhance").enhance;
 
   const handleBrightnessChange = (value: number) => {
-    context.onBrightnessChange(value + 100);
+    state.onBrightnessChange(value + 100);
     setBrightness(value);
   };
 
   const handleContrastChange = (value: number) => {
-    context.onContrastChange(value);
+    state.onContrastChange(value);
     setContrast(value);
   };
 
   const handleVignetteChange = (value: number) => {
-    context.onVignetteChange(value);
+    state.onVignetteChange(value);
     setVignette(value);
   };
 
   const handleWarmthChange = (value: number) => {
-    context.onWarmthChange(value);
+    state.onWarmthChange(value);
     setWarmth(value);
   };
 
   const handleSaturationChange = (value: number) => {
-    context.onSaturationChange(value);
+    state.onSaturationChange(value);
     setSaturation(value);
   };
 
   const handleFadeChange = (value: number) => {
-    context.onFadeChange(value);
+    state.onFadeChange(value);
     setFade(value);
   };
 
   const handleHighlightsChange = (value: number) => {
-    context.onHighlightsChange(value);
+    state.onHighlightsChange(value);
     setHighlights(value);
   };
 
   const handleShadowsChange = (value: number) => {
-    context.onShadowsChange(value);
+    state.onShadowsChange(value);
     setShadows(value);
   };
 
   const handleGrainChange = (value: number) => {
-    context.onGrainChange(value);
+    state.onGrainChange(value);
     setGrain(value);
   };
 
   const handleEnhanceChange = (value: number) => {
-    context.onEnhanceChange(value);
+    state.onEnhanceChange(value);
     setEnhance(value);
   };
 

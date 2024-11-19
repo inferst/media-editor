@@ -31,13 +31,38 @@ export const TextEditor: Component<TextEditorProps> = (props) => {
 
   const [selectedRect, setSelectedRect] = createSignal<Rect | undefined>();
 
-  const isSelected = createMemo(() => selectedElementId() != undefined);
+  const [innerSize, setInnerSize] = createSignal<Size>();
 
   const [isDragged, setIsDragged] = createSignal(false);
 
+  const [uiRef, setUiRef] = createSignal<HTMLDivElement | undefined>();
+
+  const isSelected = createMemo(() => selectedElementId() != undefined);
+
+  let isDragging = false;
+
   let editor: HTMLDivElement | undefined;
 
-  const context = useEditorContext("TextEditor");
+  const state = useEditorContext("TextEditor").text;
+
+  createEffect(
+    on(state.textOptions, () => {
+      const id = selectedElementId();
+      if (id) {
+        updateElement(id, {
+          options: state.textOptions(),
+        });
+      }
+    }),
+  );
+
+  onMount(() => {
+    document.addEventListener("mouseup", handleDocumentMouseUp);
+  });
+
+  onCleanup(() => {
+    document.removeEventListener("mouseup", handleDocumentMouseUp);
+  });
 
   const handleMouseDown = (event: MouseEvent) => {
     if (!isSelected() && !props.isDisabled) {
@@ -45,8 +70,8 @@ export const TextEditor: Component<TextEditorProps> = (props) => {
 
       const id = crypto.randomUUID();
 
-      context.setTextElements([
-        ...context.state.textElements(),
+      state.setTextElements([
+        ...state.textElements(),
         {
           id,
           position: {
@@ -54,24 +79,13 @@ export const TextEditor: Component<TextEditorProps> = (props) => {
             top: event.offsetY,
           },
           size: { width: 0, height: 0 },
-          options: context.state.textOptions(),
+          options: state.textOptions(),
         },
       ]);
 
       setSelectedElementId(id);
     }
   };
-
-  createEffect(
-    on(context.state.textOptions, () => {
-      const id = selectedElementId();
-      if (id) {
-        updateElement(id, {
-          options: context.state.textOptions(),
-        });
-      }
-    }),
-  );
 
   const handleElementMouseDown = (
     id: string,
@@ -84,20 +98,20 @@ export const TextEditor: Component<TextEditorProps> = (props) => {
     }
 
     setSelectedElementId(id);
-    context.setTextOptions(options);
-    context.state.isDragging = true;
+    state.setTextOptions(options);
+    isDragging = true;
     setOffset(offset);
     setSelectedRect(rect);
 
-    console.log("handleElementMouseDown", context.state.isDragging);
+    console.log("handleElementMouseDown", isDragging);
   };
 
-  const handleElementBlur = (id: string, isEmpty: boolean) => {
-    console.log("handleElementBlur", id, isEmpty);
+  const handleElementBlur = (id: string, content: string) => {
+    console.log("handleElementBlur", id, content == "");
 
-    if (isEmpty) {
-      context.setTextElements(
-        context.state.textElements().filter((element) => {
+    if (content == "") {
+      state.setTextElements(
+        state.textElements().filter((element) => {
           return element.id != id;
         }),
       );
@@ -109,8 +123,8 @@ export const TextEditor: Component<TextEditorProps> = (props) => {
   };
 
   const updateElement = (id: string, data: Partial<TextElementOptions>) => {
-    context.setTextElements(
-      context.state.textElements().map((element) => {
+    state.setTextElements(
+      state.textElements().map((element) => {
         if (element.id == id) {
           return {
             ...element,
@@ -124,7 +138,7 @@ export const TextEditor: Component<TextEditorProps> = (props) => {
   };
 
   const handleMouseMove = (event: MouseEvent) => {
-    if (context.state.isDragging && !props.isDisabled && editor) {
+    if (isDragging && !props.isDisabled && editor) {
       const id = selectedElementId();
 
       if (id) {
@@ -147,8 +161,6 @@ export const TextEditor: Component<TextEditorProps> = (props) => {
       }
     }
   };
-
-  const [innerSize, setInnerSize] = createSignal<Size>();
 
   const handleRender = (inner: Rect, outer: Rect) => {
     console.log("handleRender");
@@ -184,17 +196,9 @@ export const TextEditor: Component<TextEditorProps> = (props) => {
   };
 
   const handleDocumentMouseUp = () => {
-    context.state.isDragging = false;
+    isDragging = false;
     setIsDragged(false);
   };
-
-  onMount(() => {
-    document.addEventListener("mouseup", handleDocumentMouseUp);
-  });
-
-  onCleanup(() => {
-    document.removeEventListener("mouseup", handleDocumentMouseUp);
-  });
 
   const handleResize = (position: Position, size: Size) => {
     console.log("handleResize");
@@ -208,8 +212,6 @@ export const TextEditor: Component<TextEditorProps> = (props) => {
       });
     }
   };
-
-  const [uiRef, setUiRef] = createSignal<HTMLDivElement | undefined>();
 
   const resizerPosition = createMemo(() => ({
     left: selectedRect()?.left ?? 0,
@@ -238,7 +240,7 @@ export const TextEditor: Component<TextEditorProps> = (props) => {
         [styles.editable]: !isSelected() && !props.isDisabled,
       })}
     >
-      <Key each={context.state.textElements()} by={(item) => item.id}>
+      <Key each={state.textElements()} by={(item) => item.id}>
         {(item) => (
           <TextElement
             resizerRef={uiRef()}
@@ -250,7 +252,7 @@ export const TextEditor: Component<TextEditorProps> = (props) => {
             size={item().size}
             onMount={(inner, outer) => handleMount(item().id, inner, outer)}
             onRender={(inner, outer) => handleRender(inner, outer)}
-            onBlur={(isEmpty) => handleElementBlur(item().id, isEmpty)}
+            onBlur={(content) => handleElementBlur(item().id, content)}
             onMouseDown={(offset, options, rect) =>
               handleElementMouseDown(item().id, options, offset, rect)
             }

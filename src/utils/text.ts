@@ -1,11 +1,5 @@
-export const setCaretPosition = (
-  element: HTMLElement,
-  x: number,
-  y: number,
-) => {
+export const setCaretPosition = (x: number, y: number) => {
   let range: Range | undefined;
-
-  element.focus();
 
   if (typeof document.caretPositionFromPoint != "undefined") {
     const start = document.caretPositionFromPoint(x, y);
