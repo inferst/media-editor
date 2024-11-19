@@ -126,6 +126,7 @@ export function Editor() {
       textOptions,
       textOptionsRef: textSettingsRef,
       textElements,
+      isDragging: false,
     },
     onBrightnessChange,
     onContrastChange,

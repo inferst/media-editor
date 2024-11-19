@@ -1,15 +1,18 @@
 import { createClickOutside } from "@/hooks/createOusideClick";
 import { Position, Rect, Size, TextOptions } from "@/types";
-import { hsvToHex, px, stripHtmlTags } from "@/utils";
+import { hsvToHex, px, setCaretPosition, stripHtmlTags } from "@/utils";
 import clsx from "clsx";
 import { Component, createEffect, createSignal, on, onMount } from "solid-js";
 import { useEditorContext } from "../../editorContext";
 import { ContentEditable } from "./ContentEditable/ContentEditable";
 import styles from "./TextElement.module.css";
 
+type mode = "selected" | "focused" | "edited";
+
 export type TextElementProps = {
   isSelected: boolean;
   isDisabled: boolean;
+  isDragged: boolean;
   options: TextOptions;
   position: Position;
   size: Size;
@@ -26,15 +29,14 @@ export type TextElementProps = {
 
 export const TextElement: Component<TextElementProps> = (props) => {
   const [isEditable, setIsEditable] = createSignal(true);
-
+  const [isSecondClick, setIsSecondClick] = createSignal(false);
   const [editableRef, setEditableRef] = createSignal<HTMLDivElement>();
+  const [scale, setScale] = createSignal(1);
 
   let wrapper: HTMLDivElement | undefined;
   let element: HTMLDivElement | undefined;
 
   const context = useEditorContext("TextElement");
-
-  const [scale, setScale] = createSignal(1);
 
   onMount(() => {
     props.onMount(getInnerRect(), getOuterRect());
@@ -102,7 +104,9 @@ export const TextElement: Component<TextElementProps> = (props) => {
       return;
     }
 
-    if (!props.isSelected && wrapper) {
+    element?.focus();
+
+    if (wrapper && !isEditable()) {
       const wrapperRect = wrapper.getBoundingClientRect();
 
       const offset = {
@@ -112,14 +116,12 @@ export const TextElement: Component<TextElementProps> = (props) => {
 
       props.onMouseDown(offset, props.options, getOuterRect());
       event.preventDefault();
-    } else {
-      setIsEditable(true);
     }
 
     event.stopPropagation();
   };
 
-  const { setRef } = createClickOutside((event) => {
+  const { setRef: setClickOutsideRef } = createClickOutside((event) => {
     const target = event.target as HTMLElement;
     const textOptionsRef = context.state.textOptionsRef();
     const element = editableRef();
@@ -134,9 +136,8 @@ export const TextElement: Component<TextElementProps> = (props) => {
       !props.resizerRef.contains(target)
     ) {
       props.onBlur(stripHtmlTags(element.innerHTML).trim() == "");
-
       setIsEditable(false);
-      // wrapper.blur();
+      setIsSecondClick(false);
     }
   });
 
@@ -144,11 +145,36 @@ export const TextElement: Component<TextElementProps> = (props) => {
     setEditableRef(ref);
   };
 
+  const handleKeyUp = (event: KeyboardEvent) => {
+    if (event.key == "Escape") {
+      const html = editableRef()?.innerHTML ?? "";
+      props.onBlur(stripHtmlTags(html).trim() == "");
+      setIsEditable(false);
+      setIsSecondClick(false);
+    }
+
+    event.stopPropagation();
+  };
+
+  const handleMouseUp = (event: MouseEvent) => {
+    if (!isSecondClick()) {
+      setIsSecondClick(true);
+    } else if (props.isSelected && !isEditable() && !props.isDragged) {
+      setIsEditable(true);
+
+      const ref = editableRef();
+
+      if (ref) {
+        setCaretPosition(ref, event.clientX, event.clientY);
+      }
+    }
+  };
+
   return (
     <div
       ref={(ref) => {
         wrapper = ref;
-        setRef(ref);
+        setClickOutsideRef(ref);
       }}
       class={clsx(styles.wrapper, {
         [styles.edit]: isEditable(),
@@ -163,7 +189,10 @@ export const TextElement: Component<TextElementProps> = (props) => {
     >
       <div
         ref={element}
+        tabindex={-1}
         onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onKeyUp={handleKeyUp}
         class={styles.element}
         style={{
           scale: scale(),

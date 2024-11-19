@@ -1,8 +1,13 @@
 import { TextStyle } from "@/types";
+import {
+  generateStyle,
+  getCursorPosition,
+  setCursorPosition,
+  stripHtmlTags,
+} from "@/utils";
 import clsx from "clsx";
 import { Component, createMemo, createSignal, onMount } from "solid-js";
 import styles from "./ContentEditable.module.css";
-import { generateStyle, stripHtmlTags } from "@/utils";
 
 export type ContentEditableProps = {
   isEditable: boolean;
@@ -15,53 +20,73 @@ export type ContentEditableProps = {
 export const ContentEditable: Component<ContentEditableProps> = (props) => {
   const [id, setId] = createSignal("");
 
-  let pRef: HTMLParagraphElement | undefined;
   let divRef: HTMLDivElement | undefined;
 
-  const selectParagraph = () => {
-    const select = document.getSelection();
-    const range = document.createRange();
+  // const selectElement = (element?: HTMLElement) => {
+  //   const select = document.getSelection();
+  //
+  //   if (select && element) {
+  //     const range = document.createRange();
+  //     range.selectNodeContents(element);
+  //     range.collapse();
+  //     select.removeAllRanges();
+  //     select.addRange(range);
+  //     element.focus();
+  //   }
+  // };
 
-    if (select && pRef) {
-      range.selectNodeContents(pRef);
-      range.collapse();
-      select.removeAllRanges();
-      select.addRange(range);
-      pRef.focus();
-    }
-  };
+  const createElement = (content?: string): HTMLElement => {
+    const span = document.createElement("span");
+    const p = document.createElement("p");
+    // &#xFEFF; is zero width empty symbol (Chrome fix)
+    span.innerHTML = content || "&#xFEFF;";
+    p.appendChild(span);
 
-  const createParagraph = (content?: string) => {
     if (divRef) {
-      const div = document.createElement("div");
-      pRef = document.createElement("p");
-      pRef.innerHTML = content || "&#xFEFF;"; // Chrome fix
-      div.appendChild(pRef);
       divRef.innerHTML = "";
-      divRef.appendChild(div);
+      divRef.appendChild(p);
     }
+
+    return span;
   };
 
+  // When user select all span tag can be deleted
   const restoreParagraph = () => {
-    if (pRef && divRef && !divRef.querySelector("p")) {
+    const children = divRef!.children;
+    let position = getCursorPosition(divRef!);
+
+    for (const pElement of children) {
+      const length = pElement.childNodes.length;
+
+      if (length != 1 || !pElement.querySelector("span")) {
+        const content = stripHtmlTags(pElement.innerHTML).trim();
+        const span = document.createElement("span");
+        span.innerHTML = content || "&#xFEFF;";
+        pElement.innerHTML = "";
+        pElement.appendChild(span);
+
+        if (position >= 0 && position <= content.length) {
+          setCursorPosition(span.firstChild!, position);
+        }
+      } else {
+        const span = pElement.querySelector("span");
+        position = position - (span?.textContent || "").length;
+      }
+    }
+
+    if (divRef && !divRef.querySelector("span")) {
       const content = stripHtmlTags(divRef.innerHTML).trim();
-      createParagraph(content);
-      selectParagraph();
+      const element = createElement(content);
+      setCursorPosition(element, 0);
     }
   };
 
   onMount(() => {
     setId("id-" + crypto.randomUUID());
 
-    createParagraph();
-    selectParagraph();
+    const element = createElement();
+    setCursorPosition(element, 0);
   });
-
-  const handleMouseDown = (event: MouseEvent) => {
-    if (!props.isEditable) {
-      event.preventDefault();
-    }
-  };
 
   const handleInput = () => {
     restoreParagraph();
@@ -70,7 +95,7 @@ export const ContentEditable: Component<ContentEditableProps> = (props) => {
 
   const style = createMemo(() =>
     generateStyle({
-      [`#${id()} p`]: {
+      [`#${id()} span`]: {
         "background-color": props.style == "white" ? props.color : undefined,
         "-webkit-text-stroke-width": props.style == "black" ? "2px" : undefined,
       },
@@ -86,12 +111,12 @@ export const ContentEditable: Component<ContentEditableProps> = (props) => {
           props.setRef(ref);
         }}
         id={id()}
+        tabindex={-1}
         spellcheck={false}
         contenteditable={props.isEditable}
         onInput={handleInput}
-        onMouseDown={handleMouseDown}
         class={clsx(styles.contenteditable, {
-          [styles.edit]: props.isEditable,
+          [styles.editable]: props.isEditable,
         })}
         style={{
           filter: props.style == "white" ? 'url("#round")' : "none",

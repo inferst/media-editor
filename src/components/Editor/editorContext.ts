@@ -6,6 +6,8 @@ export type EditorState = {
   textOptions: Accessor<TextOptions>;
   textOptionsRef: Accessor<HTMLElement | undefined>;
   textElements: Accessor<TextElementOptions[]>;
+  isDragging: boolean;
+  isDragged: boolean;
 };
 
 export type EditorContextValue = {
