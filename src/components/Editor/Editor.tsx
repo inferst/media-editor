@@ -25,9 +25,7 @@ const postMessage = (data: MessageData, transfer?: Transferable[]) => {
 export function Editor() {
   const [isLoaded, setIsLoaded] = createSignal(false);
   const [editorType, setEditorType] = createSignal<EditorType>("enhance");
-  const [textSettingsRef, setTextSettingsRef] = createSignal<
-    HTMLElement | undefined
-  >();
+  const [textOptionsRef, setTextOptionsRef] = createSignal<HTMLElement>();
   const [textOptions, setTextOptions] = createSignal<TextOptions>(
     getDefaultTextOptions(),
   );
@@ -116,32 +114,29 @@ export function Editor() {
     setEditorType(type);
   };
 
-  const setTextOptionsRef = (ref: HTMLElement) => {
-    setTextSettingsRef(ref);
-  };
-
   const context: EditorContextValue = {
-    state: {
-      editorType,
-      textOptions,
-      textOptionsRef: textSettingsRef,
-      textElements,
-    },
-    onBrightnessChange,
-    onContrastChange,
-    onVignetteChange,
-    onShadowsChange,
-    onFadeChange,
-    onGrainChange,
-    onWarmthChange,
-    onHighlightsChange,
-    onSaturationChange,
-    onEnhanceChange,
+    editorType,
     onEditorTypeChange,
-
-    setTextOptions,
-    setTextElements,
-    setTextOptionsRef,
+    text: {
+      textOptions,
+      textOptionsRef,
+      textElements,
+      setTextOptions,
+      setTextElements,
+      setTextOptionsRef,
+    },
+    enhance: {
+      onBrightnessChange,
+      onContrastChange,
+      onVignetteChange,
+      onShadowsChange,
+      onFadeChange,
+      onGrainChange,
+      onWarmthChange,
+      onHighlightsChange,
+      onSaturationChange,
+      onEnhanceChange,
+    },
   };
 
   const handleLoad = (bitmap: ImageBitmap) => {

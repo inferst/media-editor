@@ -6,6 +6,7 @@ export type SidebarButtonProps = {
   onClick?: () => void;
   icon?: JSX.Element;
   isActive?: boolean;
+  style?: JSX.CSSProperties;
   class?: JSX.ElementClass;
 };
 
@@ -13,6 +14,7 @@ const SidebarButton: ParentComponent<SidebarButtonProps> = (props) => {
   return (
     <div
       onClick={() => props.onClick?.()}
+      style={props.style}
       class={clsx(styles.row, props.class, { [styles.active]: props.isActive })}
     >
       <Show when={props.icon}>

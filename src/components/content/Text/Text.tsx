@@ -1,5 +1,5 @@
 import { TextAlignment, TextOptions, TextStyle } from "@/types";
-import { hexToHsv, HsvObject, hsvToHex } from "@/utils";
+import { fonts, HsvObject, hsvToHex } from "@/utils";
 import { createSignal, For, onMount } from "solid-js";
 import { useEditorContext } from "../../Editor/editorContext";
 import Adjust from "../../ui/Adjust/Adjust";
@@ -11,59 +11,10 @@ import { Alignment } from "./Alignment/Alignment";
 import { Style } from "./Style/Style";
 import styles from "./Text.module.css";
 
-type TextFont = {
-  style: string;
-  title: string;
-  font: string;
-};
-
 const Text = () => {
   const [ref, setRef] = createSignal<HTMLElement | undefined>();
 
-  const context = useEditorContext("Text");
-
-  const fonts: TextFont[] = [
-    {
-      style: styles.roboto,
-      font: "Roboto",
-      title: "Roboto",
-    },
-    {
-      style: styles.typewriter,
-      font: "Typewriter",
-      title: "Typewriter",
-    },
-    {
-      style: styles.avenir,
-      font: "AvenirNext",
-      title: "Avenir Next",
-    },
-    {
-      style: styles.courier,
-      font: "CourierNew",
-      title: "Courier New",
-    },
-    {
-      style: styles.noteworthy,
-      font: "Noteworthy",
-      title: "Noteworthy",
-    },
-    {
-      style: styles.georgia,
-      font: "Georgia",
-      title: "Georgia",
-    },
-    {
-      style: styles.papyrus,
-      font: "Papyrus",
-      title: "Papyrus",
-    },
-    {
-      style: styles.snell,
-      font: "SnellRoundhand",
-      title: "Snell Roundhand",
-    },
-  ];
+  const state = useEditorContext("Text").text;
 
   const colors = [
     "#FFFFFF",
@@ -77,80 +28,80 @@ const Text = () => {
   ];
 
   const setTextOptions = (options: TextOptions) => {
-    context.setTextOptions(options);
+    state.setTextOptions(options);
   };
 
   const handleAlignmentClick = (item: TextAlignment) => {
     setTextOptions({
-      ...context.state.textOptions(),
+      ...state.textOptions(),
       alignment: item,
     });
   };
 
   const handleStyleClick = (item: TextStyle) => {
     setTextOptions({
-      ...context.state.textOptions(),
+      ...state.textOptions(),
       style: item,
     });
   };
 
   const handleSizeChange = (value: number) => {
     setTextOptions({
-      ...context.state.textOptions(),
+      ...state.textOptions(),
       size: value,
     });
   };
 
   const handleFontChange = (value: string) => {
     setTextOptions({
-      ...context.state.textOptions(),
+      ...state.textOptions(),
       font: value,
     });
   };
 
   const handleColorChange = (value: HsvObject) => {
     setTextOptions({
-      ...context.state.textOptions(),
-      color: hsvToHex(value),
+      ...state.textOptions(),
+      color: value,
     });
   };
 
   onMount(() => {
     const element = ref();
     if (element) {
-      context.setTextOptionsRef(element);
+      state.setTextOptionsRef(element);
     }
   });
 
   return (
     <div ref={setRef}>
       <Colors
-        color={hexToHsv(context.state.textOptions().color)}
+        color={state.textOptions().color}
         colors={colors}
         onChange={handleColorChange}
       />
       <div class={styles["text-row"]}>
         <SidebarRow isColumn={true}>
           <Alignment
-            value={context.state.textOptions().alignment}
+            value={state.textOptions().alignment}
             onClick={(value) => handleAlignmentClick(value)}
           />
         </SidebarRow>
         <SidebarRow isColumn={true}>
           <Style
-            value={context.state.textOptions().style}
+            value={state.textOptions().style}
             onClick={(value) => handleStyleClick(value)}
           />
         </SidebarRow>
       </div>
       <Adjust
         heading="Size"
-        min={0}
+        min={8}
         max={48}
-        default={0}
-        value={context.state.textOptions().size}
+        default={8}
+        value={state.textOptions().size}
         onChange={handleSizeChange}
-        color={context.state.textOptions().color}
+        color={hsvToHex(state.textOptions().color)}
       />
       <Label class={styles.label}>Font</Label>
       <SidebarRow>
@@ -158,8 +109,8 @@ const Text = () => {
           {(item) => (
             <SidebarButton
               onClick={() => handleFontChange(item.font)}
-              isActive={context.state.textOptions().font == item.font}
-              class={item.style}
+              isActive={state.textOptions().font == item.font}
+              style={{ "font-family": item.font }}
             >
               {item.title}
             </SidebarButton>

@@ -1,3 +1,4 @@
+import { HsvObject } from "@/utils";
 import { Position, Size } from "./editor";
 
 export type TextAlignment = "left" | "center" | "right";
@@ -5,7 +6,7 @@ export type TextAlignment = "left" | "center" | "right";
 export type TextStyle = "noframe" | "black" | "white";
 
 export type TextOptions = {
-  color: string;
+  color: HsvObject;
   alignment: TextAlignment;
   style: TextStyle;
   size: number;
@@ -17,4 +18,9 @@ export type TextElementOptions = {
   position: Position;
   size: Size;
   options: TextOptions;
+};
+
+export type TextFont = {
+  title: string;
+  font: string;
 };

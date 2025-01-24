@@ -1,31 +1,39 @@
 .resize-button {
   position: absolute;
-  width: 8px;
-  height: 8px;
-  background-color: #fff;
-  border-radius: 8px;
-  margin-left: -4px;
-  margin-top: -4px;
+  margin-left: -14px;
+  margin-top: -14px;
+  padding: 10px;
   z-index: 20;
 
   &.left-top {
     left: 0;
     top: 0;
+    cursor: nw-resize;
   }
 
   &.right-top {
     left: 100%;
     top: 0;
+    cursor: ne-resize;
   }
 
   &.left-bottom {
     left: 0;
     top: 100%;
+    cursor: sw-resize;
   }
 
   &.right-bottom {
     left: 100%;
     top: 100%;
+    cursor: se-resize;
+  }
+
+  .resize-circle {
+    background-color: #fff;
+    width: 8px;
+    height: 8px;
+    border-radius: 8px;
   }
 }
 
