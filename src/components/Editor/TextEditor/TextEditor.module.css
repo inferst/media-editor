@@ -1,7 +1,5 @@
 .editor {
   position: absolute;
-  width: 800px;
-  height: 600px;
   overflow: hidden;
 
   &.editable {

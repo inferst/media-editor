@@ -6,10 +6,6 @@ export const fonts: TextFont[] = [
     title: "Roboto",
   },
   {
-    font: "Overdoze",
-    title: "Overdoze",
-  },
-  {
     font: "AmaticSC",
     title: "Amatic SC",
   },

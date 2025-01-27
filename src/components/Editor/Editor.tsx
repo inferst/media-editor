@@ -4,7 +4,7 @@ import {
   TextElementOptions,
   TextOptions,
 } from "@/types";
-import { createSignal, onMount, Show } from "solid-js";
+import { createSignal, Show } from "solid-js";
 import EditorWorker from "../../workers/editorWorker?worker";
 import { getDefaultTextOptions } from "../content/Text/textOptions";
 import { Sidebar } from "../Sidebar/Sidebar";
@@ -12,7 +12,7 @@ import BrowseFile from "./BrowseFile";
 import { download } from "./download/download";
 import { DownloadButton } from "./DownloadButton/DownloadButton";
 import styles from "./Editor.module.css";
-import { EditorContext, EditorContextValue } from "./editorContext";
+import { EditorContext, EditorContextValue, ImageState } from "./editorContext";
 import { SVGFilter } from "./TextEditor/SVGFilter/SVGFilter";
 import { TextEditor } from "./TextEditor/TextEditor";
 
@@ -25,6 +25,10 @@ const postMessage = (data: MessageData, transfer?: Transferable[]) => {
 export function Editor() {
   const [isLoaded, setIsLoaded] = createSignal(false);
   const [editorType, setEditorType] = createSignal<EditorType>("enhance");
+  const [imageState, setImageState] = createSignal<ImageState>({
+    width: 0,
+    height: 0,
+  });
   const [textOptionsRef, setTextOptionsRef] = createSignal<HTMLElement>();
   const [textOptions, setTextOptions] = createSignal<TextOptions>(
     getDefaultTextOptions(),
@@ -37,20 +41,6 @@ export function Editor() {
   let canvasRef: HTMLCanvasElement | undefined;
   let containerRef: HTMLDivElement | undefined;
   let offscreen: OffscreenCanvas | undefined;
-
-  onMount(() => {
-    if (canvasRef) {
-      const img = new Image();
-      img.src = "image.jpg";
-
-      img.addEventListener("load", () => {
-        canvasRef.width = img.width;
-        canvasRef.height = img.height;
-        offscreen = canvasRef.transferControlToOffscreen();
-        editorWorker.postMessage({ offscreen }, [offscreen]);
-      });
-    }
-  });
 
   const onBrightnessChange = (value: number) => {
     console.log(value);
@@ -117,6 +107,7 @@ export function Editor() {
   const context: EditorContextValue = {
     editorType,
     onEditorTypeChange,
+    image: imageState,
     text: {
       textOptions,
       textOptionsRef,
@@ -147,6 +138,10 @@ export function Editor() {
       canvasRef.height = bitmap.height;
       offscreen = canvasRef.transferControlToOffscreen();
       postMessage({ canvas: offscreen, bitmap }, [offscreen]);
+      setImageState({
+        width: bitmap.width,
+        height: bitmap.height,
+      });
     }
   };
 

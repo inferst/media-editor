@@ -16,6 +16,7 @@ import { useEditorContext } from "../editorContext";
 import { Resizer } from "./Resizer/Resizer";
 import styles from "./TextEditor.module.css";
 import { TextElement } from "./TextElement/TextElement";
+import { px } from "@/utils";
 
 export type TextEditorProps = {
   isDisabled: boolean;
@@ -43,7 +44,10 @@ export const TextEditor: Component<TextEditorProps> = (props) => {
 
   let editor: HTMLDivElement | undefined;
 
-  const state = useEditorContext("TextEditor").text;
+  const context = useEditorContext("TextEditor");
+
+  const state = context.text;
+  const image = context.image;
 
   createEffect(
     on(state.textOptions, () => {
@@ -239,6 +243,10 @@ export const TextEditor: Component<TextEditorProps> = (props) => {
       class={clsx(styles.editor, {
         [styles.editable]: !isSelected() && !props.isDisabled,
       })}
+      style={{
+        width: px(800),
+        height: px(image().height / image().width * 800),
+      }}
     >
       <Key each={state.textElements()} by={(item) => item.id}>
         {(item) => (

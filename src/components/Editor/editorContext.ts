@@ -1,7 +1,7 @@
 import { EditorType, TextElementOptions, TextOptions } from "@/types";
 import { Accessor, createContext, useContext } from "solid-js";
 
-type TextEditorState = {
+export type TextEditorState = {
   textOptions: Accessor<TextOptions>;
   textOptionsRef: Accessor<HTMLElement | undefined>;
   textElements: Accessor<TextElementOptions[]>;
@@ -11,7 +11,12 @@ type TextEditorState = {
   setTextElements: (elements: TextElementOptions[]) => void;
 };
 
-type EnhanceEditorState = {
+export type ImageState = {
+  width: number;
+  height: number;
+};
+
+export type EnhanceEditorState = {
   onBrightnessChange: (value: number) => void;
   onContrastChange: (value: number) => void;
   onVignetteChange: (value: number) => void;
@@ -30,6 +35,8 @@ export type EditorContextValue = {
 
   text: TextEditorState;
   enhance: EnhanceEditorState;
+
+  image: Accessor<ImageState>;
 };
 
 export const EditorContext = createContext<EditorContextValue>();
