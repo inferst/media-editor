@@ -3,15 +3,8 @@
   border: none;
   outline: none;
 
-  p {
-    margin: 0;
-    padding: 0;
-  }
-
   span {
     display: inline;
-    margin: 0;
-    padding: 0 6px;
     white-space: nowrap;
     overflow: hidden;
     -webkit-text-stroke-color: black;

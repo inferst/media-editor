@@ -103,7 +103,8 @@ export const ContentEditable: Component<ContentEditableProps> = (props) => {
   });
 
   const color = createMemo(() => {
-    const computed = props.color.v > 50 && props.color.s < 50 ? "black" : "white";
+    const computed =
+      props.color.v > 50 && props.color.s < 50 ? "black" : "white";
     return props.style == "white" ? computed : hsvToHex(props.color);
   });
 
@@ -116,6 +117,14 @@ export const ContentEditable: Component<ContentEditableProps> = (props) => {
       [`#${id()} span`]: {
         "background-color": backgroundColor(),
         "-webkit-text-stroke-width": props.style == "black" ? "2px" : undefined,
+      },
+      span: {
+        margin: 0,
+        padding: "0 6px",
+      },
+      p: {
+        margin: 0,
+        padding: 0,
       },
     }),
   );

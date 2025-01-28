@@ -55,7 +55,7 @@ export async function buildTextEditorCanvas(
   height: number,
   fonts: string[],
 ): Promise<HTMLCanvasElement> {
-  const svgFragment = await buildSvgFragment(fragment, 800, 600, fonts);
+  const svgFragment = await buildSvgFragment(fragment, 800, height / width * 800, fonts);
 
   return new Promise((resolve, reject) => {
     const bytes = new TextEncoder().encode(svgFragment);
